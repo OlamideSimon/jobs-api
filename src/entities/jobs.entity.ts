@@ -22,8 +22,11 @@ export class Jobs extends Model {
   @Column()
   title: string;
 
-  @Column()
+  @Column({ type: 'text' })
   description: string;
+
+  @Column('text', { array: true })
+  qualifications: string[];
 
   @Column()
   location: string;

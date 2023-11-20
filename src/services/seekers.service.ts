@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SeekerDTO } from 'src/dto/create/seeker.dto';
-import { UpdateSeekerDTO } from 'src/dto/update/seeker.dto';
+import { SeekerDTO } from 'src/dto/create/seeker.createDto';
+import { UpdateSeekerDTO } from 'src/dto/update/seeker.updateDto';
 
 @Injectable()
 export class SeekerService {

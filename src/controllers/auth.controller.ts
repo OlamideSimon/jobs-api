@@ -4,7 +4,7 @@ import {
   LoginDTO,
   RegisterCompanyDTO,
   RegisterSeekerDTO,
-} from 'src/dto/create/auth.dto';
+} from 'src/dto/create/auth.createDto';
 import { AuthService } from 'src/services/auth.service';
 
 @Controller('auth')

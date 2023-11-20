@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UpdateSeekerDTO } from 'src/dto/update/seeker.dto';
+import { UpdateSeekerDTO } from 'src/dto/update/seeker.updateDto';
 import { SeekerService } from 'src/services/seekers.service';
 
 @Controller('seeker')
