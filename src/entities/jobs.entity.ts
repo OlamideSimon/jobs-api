@@ -1,18 +1,7 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import Model from './base.entity';
 import { Employers } from './employers.entity';
-
-export enum JobsType {
-  FULL_TIME = 'full',
-  PART_TIME = 'part',
-  CONTRACT = 'contract',
-}
-
-export enum ExperienceLevel {
-  ENTRY = 'entry',
-  INTERMEDIATE = 'intermediate',
-  SENIOR = 'senior',
-}
+import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
 
 @Entity()
 export class Jobs extends Model {
@@ -25,17 +14,38 @@ export class Jobs extends Model {
   @Column({ type: 'text' })
   description: string;
 
+  @Column('text')
+  responsibilities: string;
+
+  @Column('text')
+  who_you_are: string;
+
+  @Column('text')
+  nice_to_haves: string;
+
   @Column('text', { array: true })
-  qualifications: string[];
+  categories: string[];
 
   @Column()
   location: string;
 
-  @Column({ type: 'enum', enum: JobsType, default: JobsType.FULL_TIME })
-  type: JobsType;
+  @Column({
+    type: 'enum',
+    enum: JobsType,
+    default: [JobsType.FULL_TIME],
+    array: true,
+  })
+  type: JobsType[];
 
-  @Column()
-  industry: string;
+  @Column({
+    type: 'enum',
+    enum: IndustriesType,
+    default: [IndustriesType.Miscellaneous],
+  })
+  industry: IndustriesType[];
+
+  @Column('text', { array: true })
+  skills: string[];
 
   @Column({
     type: 'enum',

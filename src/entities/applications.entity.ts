@@ -2,13 +2,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 import Model from './base.entity';
 import { JobSeekers } from './seekers.entity';
 import { Jobs } from './jobs.entity';
-
-enum Status {
-  PENDING = 'pending',
-  ACCEPTED = 'accepted',
-  REJECTED = 'rejected',
-  REVIEWED = 'reviewed',
-}
+import { Status } from 'src/utils/enums';
 
 @Entity()
 export class Applications extends Model {

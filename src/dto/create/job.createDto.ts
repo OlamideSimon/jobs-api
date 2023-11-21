@@ -1,42 +1,73 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsString, IsArray, IsNumber, IsDate } from 'class-validator';
-import { ExperienceLevel, JobsType } from 'src/entities/jobs.entity';
+import { ApiProperty, ApiTags } from '@nestjs/swagger';
+import {
+  IsArray,
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsString,
+  ArrayNotEmpty,
+} from 'class-validator';
+import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
 
-export class JobDTO {
-  @IsString()
+@ApiTags('Jobs')
+export class CreateJobDTO {
   @ApiProperty()
+  @IsString()
   title: string;
 
-  @IsString()
   @ApiProperty()
+  @IsString()
   description: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @ApiProperty({ type: [String] })
-  qualifications: string[];
-
-  @IsString()
   @ApiProperty()
+  @IsString()
+  responsibilities: string;
+
+  @ApiProperty()
+  @IsString()
+  who_you_are: string;
+
+  @ApiProperty()
+  @IsString()
+  nice_to_haves: string;
+
+  @ApiProperty()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  categories: string[];
+
+  @ApiProperty()
+  @IsString()
   location: string;
 
-  @IsEnum(JobsType)
-  @ApiProperty({ enum: JobsType })
-  type: JobsType;
-
-  @IsString()
   @ApiProperty()
-  industry: string;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsEnum(JobsType, { each: true })
+  type: JobsType[];
 
+  @ApiProperty()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsEnum(IndustriesType, { each: true })
+  industry: IndustriesType[];
+
+  @ApiProperty()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  skills: string[];
+
+  @ApiProperty()
   @IsEnum(ExperienceLevel)
-  @ApiProperty({ enum: ExperienceLevel })
   experienceLevel: ExperienceLevel;
 
-  @IsNumber()
   @ApiProperty()
+  @IsNumber()
   salary: number;
 
-  @IsDate()
   @ApiProperty()
+  @IsDate()
   deadline: Date;
 }

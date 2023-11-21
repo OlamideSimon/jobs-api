@@ -15,7 +15,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { Role } from 'src/decorators/roles.decorator';
-import { JobDTO } from 'src/dto/create/job.createDto';
+import { CreateJobDTO } from 'src/dto/create/job.createDto';
 import { UpdateJobsDTO } from 'src/dto/update/job.updateDto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RoleGuard } from 'src/guards/roles.guard';
@@ -32,7 +32,7 @@ export class JobsController {
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Create a new job' })
   @ApiResponse({ status: 201, description: 'Job created successfully' })
-  createJobHandler(@Body() body: JobDTO, req: any) {
+  createJobHandler(@Body() body: CreateJobDTO, req: any) {
     return this.jobService.createJob(body, req.user);
   }
 

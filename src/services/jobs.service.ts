@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { JobDTO } from 'src/dto/create/job.createDto';
+import { CreateJobDTO } from 'src/dto/create/job.createDto';
 import { UpdateJobsDTO } from 'src/dto/update/job.updateDto';
 import { Employers } from 'src/entities/employers.entity';
 import { Jobs } from 'src/entities/jobs.entity';
@@ -13,7 +13,7 @@ export class JobService {
     private readonly jobRepository: Repository<Jobs>,
   ) {}
 
-  async createJob(jobDto: JobDTO, user: Employers) {
+  async createJob(jobDto: CreateJobDTO, user: Employers) {
     try {
       const company = await this.jobRepository.save(
         this.jobRepository.create({
@@ -49,7 +49,7 @@ export class JobService {
       const job = await this.jobRepository.findOneBy({ id });
 
       if (!job) {
-        throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
+        throw new HttpException('Job does not exist', HttpStatus.BAD_REQUEST);
       }
 
       return {
@@ -65,7 +65,7 @@ export class JobService {
     const job = await this.jobRepository.preload({ id, ...data });
 
     if (!job) {
-      throw new HttpException(`User not Found`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(`Job not Found`, HttpStatus.BAD_REQUEST);
     }
 
     await job.save();
@@ -80,7 +80,7 @@ export class JobService {
     const job = await this.jobRepository.findOneBy({ id });
 
     if (!job) {
-      throw new HttpException('User does not exist', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Job does not exist', HttpStatus.BAD_REQUEST);
     }
 
     await this.jobRepository.delete({ id });

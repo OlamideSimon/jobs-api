@@ -1,18 +1,6 @@
 import { Column, Entity } from 'typeorm';
 import User from './user.base';
-
-export enum Gender {
-  Male = 'Male',
-  Female = 'Female',
-  OTHERS = 'others',
-}
-
-export enum Availability {
-  FULL_TIME = 'full',
-  PART_TIME = 'part',
-  LIVE_IN = 'live_in',
-  OTHERS = 'others',
-}
+import { Availability, Gender } from 'src/utils/enums';
 
 @Entity()
 export class DomesticStaff extends User {
