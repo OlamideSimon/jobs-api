@@ -7,13 +7,6 @@ export class Employers extends User {
   @Column()
   companyName: string;
 
-  @Column('jsonb', {
-    array: false,
-    nullable: false,
-    default: { url: '', id: '' },
-  })
-  logo: { url: string; id: string };
-
   @Column({ nullable: true })
   employees: string;
 

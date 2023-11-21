@@ -8,11 +8,6 @@ export class CreateEmployersDTO {
   @ApiProperty()
   companyName: string;
 
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  logoUrl?: string;
-
   @IsOptional()
   @IsString()
   @ApiProperty({ required: false })
