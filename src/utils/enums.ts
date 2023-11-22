@@ -54,3 +54,8 @@ export enum IndustriesType {
   ManufacturingProduction = 'manufacturing & production',
   Miscellaneous = 'miscellaneous',
 }
+
+export enum UserType {
+  Seeker = 'seeker',
+  Company = 'company',
+}

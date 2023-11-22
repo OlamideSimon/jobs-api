@@ -1,9 +1,9 @@
 import { Column, Entity, OneToMany } from 'typeorm';
-import User from './user.base';
 import { Services } from './services.entity';
+import Model from './base.entity';
 
 @Entity()
-export class Artisans extends User {
+export class Artisans extends Model {
   @Column()
   fName: string;
 

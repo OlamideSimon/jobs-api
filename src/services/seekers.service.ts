@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { SeekerDTO } from 'src/dto/create/seeker.createDto';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateSeekerDTO } from 'src/dto/update/seeker.updateDto';
+import { JobSeekers } from 'src/entities/seekers.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class SeekerService {
-  async createNewSeeker(seekerDto: SeekerDTO) {
-    return { seekerDto };
-  }
+  constructor(
+    @InjectRepository(JobSeekers)
+    private jobSeekerRepository: Repository<JobSeekers>,
+  ) {}
 
   async upDateSeeker(seekerDto: UpdateSeekerDTO) {
     return { seekerDto };

@@ -1,9 +1,9 @@
 import { Column, Entity } from 'typeorm';
-import User from './user.base';
 import { Availability, Gender } from 'src/utils/enums';
+import Model from './base.entity';
 
 @Entity()
-export class DomesticStaff extends User {
+export class DomesticStaff extends Model {
   @Column()
   fName: string;
 

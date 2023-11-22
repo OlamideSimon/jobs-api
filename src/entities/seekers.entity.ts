@@ -10,7 +10,7 @@ export class JobSeekers extends User {
   lName: string;
 
   @Column({ nullable: true })
-  contact: string;
+  phone: string;
 
   @Column({ type: 'text', nullable: true })
   resumeUrl: string;

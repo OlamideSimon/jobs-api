@@ -1,10 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import {
-  LoginDTO,
-  RegisterCompanyDTO,
-  RegisterSeekerDTO,
-} from 'src/dto/create/auth.createDto';
+import { LoginDTO, RegistrationDTO } from 'src/dto/create/auth.createDto';
 import { AuthService } from 'src/services/auth.service';
 
 @Controller('auth')
@@ -20,22 +16,14 @@ export class AuthController {
     return this.authService.login(data);
   }
 
-  @Post('register/seeker')
-  @ApiOperation({ summary: 'Register as a job seeker' })
+  @Post('register')
+  @ApiOperation({ summary: 'Register as a new user(seeker or company)' })
   @ApiResponse({
     status: 201,
     description: 'Job seeker registration successful',
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  registerSeekerHandler(@Body() data: RegisterSeekerDTO) {
-    return this.authService.registerSeeker(data);
-  }
-
-  @Post('register/company')
-  @ApiOperation({ summary: 'Register as a company' })
-  @ApiResponse({ status: 201, description: 'Company registration successful' })
-  @ApiResponse({ status: 400, description: 'Bad request' })
-  registerCompanyHandler(@Body() data: RegisterCompanyDTO) {
-    return this.authService.registerCompany(data);
+  registerSeekerHandler(@Body() data: RegistrationDTO) {
+    return this.authService.register(data);
   }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -32,7 +33,7 @@ export class JobsController {
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Create a new job' })
   @ApiResponse({ status: 201, description: 'Job created successfully' })
-  createJobHandler(@Body() body: CreateJobDTO, req: any) {
+  createJobHandler(@Body() body: CreateJobDTO, @Request() req: any) {
     return this.jobService.createJob(body, req.user);
   }
 
