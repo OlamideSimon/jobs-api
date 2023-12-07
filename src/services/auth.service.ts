@@ -59,11 +59,17 @@ export class AuthService {
       let account: Employers | JobSeekers;
       if (registerDto.account_type === 'seeker') {
         account = await this.seekerRepository.save(
-          this.seekerRepository.create({ ...registerDto }),
+          this.seekerRepository.create({
+            ...registerDto,
+            fName: registerDto.first_name,
+            lName: registerDto.last_name,
+          }),
         );
       } else if (registerDto.account_type === 'company') {
         account = await this.employersRepository.save(
-          this.employersRepository.create({ ...registerDto }),
+          this.employersRepository.create({
+            ...registerDto,
+          }),
         );
       }
 
@@ -78,6 +84,7 @@ export class AuthService {
       if (error.code === '23505' && error.detail.includes('email')) {
         throw new ConflictException('Email address is already in use.');
       }
+      console.log(error);
       throw new InternalServerErrorException(
         'Registration failed. Please try again later.',
       );
