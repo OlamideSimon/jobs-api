@@ -43,14 +43,17 @@ export class AuthService {
       }
 
       await comparePassword(loginDto.password, account.password);
-      const access_token = await this.generateToken(account);
+      const access_token = await this.generateToken(
+        { id: account.id, email: account.email },
+        loginDto.remember_me,
+      );
 
       return {
         status: 'success',
         access_token,
       };
     } catch (error) {
-      throw error;
+      throw new Error(error);
     }
   }
 
@@ -73,7 +76,10 @@ export class AuthService {
         );
       }
 
-      const access_token = await this.generateToken(account);
+      const access_token = await this.generateToken({
+        id: account.id,
+        email: account.email,
+      });
 
       return {
         status: 'success',
@@ -92,7 +98,7 @@ export class AuthService {
   }
 
   generateToken(payload: any, remember_me?: boolean): string {
-    const expiresIn = remember_me ? '30d' : undefined;
+    const expiresIn = remember_me ? '30d' : '3d';
     return this.jwtService.sign(payload, { expiresIn });
   }
 }

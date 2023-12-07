@@ -4,6 +4,7 @@ import {
   IsEmail,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
   Matches,
   ValidateIf,
@@ -36,6 +37,7 @@ export class LoginDTO {
 
   @IsBoolean()
   @ApiProperty()
+  @IsOptional()
   remember_me: boolean;
 }
 
