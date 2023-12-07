@@ -35,6 +35,11 @@ export class AuthService {
       }
 
       if (!account) {
+        return {
+          status: 'error',
+          message:
+            'Account not found. Please check your email or account type.',
+        };
       }
 
       await comparePassword(loginDto.password, account.password);
