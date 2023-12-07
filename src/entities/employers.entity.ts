@@ -5,7 +5,7 @@ import { IndustriesType } from 'src/utils/enums';
 @Entity()
 export class Employers extends User {
   @Column()
-  companyName: string;
+  company_name: string;
 
   @Column({ nullable: true })
   employees: string;
