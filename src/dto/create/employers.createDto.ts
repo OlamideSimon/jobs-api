@@ -6,7 +6,7 @@ import { IndustriesType } from 'src/utils/enums';
 export class CreateEmployersDTO {
   @IsString()
   @ApiProperty()
-  companyName: string;
+  company_name: string;
 
   @IsOptional()
   @IsString()
