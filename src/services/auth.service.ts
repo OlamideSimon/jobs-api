@@ -52,11 +52,11 @@ export class AuthService {
   async register(registerDto: RegistrationDTO) {
     try {
       let account: Employers | JobSeekers;
-      if (registerDto.user_type === 'seeker') {
+      if (registerDto.account_type === 'seeker') {
         account = await this.seekerRepository.save(
           this.seekerRepository.create({ ...registerDto }),
         );
-      } else if (registerDto.user_type === 'company') {
+      } else if (registerDto.account_type === 'company') {
         account = await this.employersRepository.save(
           this.employersRepository.create({ ...registerDto }),
         );
@@ -79,7 +79,8 @@ export class AuthService {
     }
   }
 
-  generateToken(payload: any): string {
-    return this.jwtService.sign(payload);
+  generateToken(payload: any, remember_me?: boolean): string {
+    const expiresIn = remember_me ? '30d' : undefined;
+    return this.jwtService.sign(payload, { expiresIn });
   }
 }

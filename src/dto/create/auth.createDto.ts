@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -24,9 +25,18 @@ export class LoginDTO {
   @ApiProperty()
   password: string;
 
-  @IsString()
-  @ApiProperty({ enum: ['seeker', 'company'], default: 'seeker' })
-  account_type: 'seeker' | 'company';
+  @IsEnum(UserType, {
+    message: 'Invalid user_type. Must be either "seeker" or "company".',
+  })
+  @ApiProperty({
+    enum: UserType,
+    description: 'User type: "seeker" or "company".',
+  })
+  account_type: UserType;
+
+  @IsBoolean()
+  @ApiProperty()
+  remember_me: boolean;
 }
 
 export class RegistrationDTO {
@@ -37,7 +47,7 @@ export class RegistrationDTO {
     enum: UserType,
     description: 'User type: "seeker" or "company".',
   })
-  user_type: UserType;
+  account_type: UserType;
 
   @IsString()
   @IsNotEmpty({ message: 'First name is required.' })
