@@ -33,7 +33,9 @@ export class JobService {
 
   async getJobs() {
     try {
-      const jobs = await this.jobRepository.find();
+      const jobs = await this.jobRepository.find({
+        order: { created_at: 'ASC' },
+      });
 
       return {
         status: 'success',
