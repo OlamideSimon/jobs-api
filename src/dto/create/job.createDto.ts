@@ -6,6 +6,8 @@ import {
   IsNumber,
   IsString,
   ArrayNotEmpty,
+  IsBoolean,
+  IsOptional,
 } from 'class-validator';
 import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
 
@@ -70,4 +72,9 @@ export class CreateJobDTO {
   @ApiProperty()
   @IsDate()
   deadline: Date;
+
+  @ApiProperty()
+  @IsBoolean()
+  @IsOptional()
+  isFeatured: boolean;
 }

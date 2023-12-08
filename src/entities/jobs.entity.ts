@@ -59,4 +59,7 @@ export class Jobs extends Model {
 
   @Column('date')
   deadline: Date;
+
+  @Column({ type: 'boolean', default: false })
+  isFeatured: boolean;
 }
