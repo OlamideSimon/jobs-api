@@ -47,6 +47,16 @@ export class JobsController {
     return this.jobService.getJobs();
   }
 
+  @Get('featured')
+  @ApiOperation({ summary: 'Get a featured list of jobs' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of Featured jobs retrieved successfully',
+  })
+  getFeaturedJobsHandler() {
+    return this.jobService.getFeaturedJobs();
+  }
+
   @Get(':id')
   @ApiOperation({ summary: 'Get a job by ID' })
   @ApiResponse({ status: 200, description: 'Job retrieved successfully' })

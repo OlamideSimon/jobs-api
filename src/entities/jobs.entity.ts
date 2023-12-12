@@ -1,7 +1,8 @@
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import Model from './base.entity';
 import { Employers } from './employers.entity';
 import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
+import { Applications } from './applications.entity';
 
 @Entity()
 export class Jobs extends Model {
@@ -62,4 +63,12 @@ export class Jobs extends Model {
 
   @Column({ type: 'boolean', default: false })
   isFeatured: boolean;
+
+  @Column({ type: 'boolean', default: true })
+  isOpen: boolean;
+
+  @OneToMany(() => Applications, (application) => application.job, {
+    eager: true,
+  })
+  applications: Applications[];
 }

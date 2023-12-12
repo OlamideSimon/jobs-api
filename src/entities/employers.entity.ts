@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import User from './user.base';
 import { IndustriesType } from 'src/utils/enums';
+import { Jobs } from './jobs.entity';
 
 @Entity()
 export class Employers extends User {
@@ -35,4 +36,7 @@ export class Employers extends User {
 
   @Column({ default: 'employer' })
   role: string;
+
+  @OneToMany(() => Jobs, (jobs) => jobs.employer, { eager: true })
+  jobs: Jobs[];
 }

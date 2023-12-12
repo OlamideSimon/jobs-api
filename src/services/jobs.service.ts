@@ -35,6 +35,22 @@ export class JobService {
     try {
       const jobs = await this.jobRepository.find({
         order: { created_at: 'ASC' },
+        where: { isOpen: true },
+      });
+
+      return {
+        status: 'success',
+        data: jobs,
+      };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getFeaturedJobs() {
+    try {
+      const jobs = await this.jobRepository.find({
+        where: { isFeatured: true, isOpen: true },
       });
 
       return {
