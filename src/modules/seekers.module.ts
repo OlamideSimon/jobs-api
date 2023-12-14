@@ -8,5 +8,6 @@ import { SeekerService } from 'src/services/seekers.service';
   providers: [SeekerService],
   controllers: [SeekersController],
   imports: [TypeOrmModule.forFeature([JobSeekers])],
+  exports: [SeekerService],
 })
 export class JobSeekersModule {}

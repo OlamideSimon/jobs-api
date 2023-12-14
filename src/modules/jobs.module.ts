@@ -9,5 +9,6 @@ import { JobService } from 'src/services/jobs.service';
   imports: [TypeOrmModule.forFeature([Jobs])],
   controllers: [JobsController],
   providers: [JobService, JwtService],
+  exports: [JobService],
 })
 export class JobsModule {}

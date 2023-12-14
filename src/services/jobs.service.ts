@@ -75,10 +75,7 @@ export class JobService {
         throw new HttpException('Job does not exist', HttpStatus.BAD_REQUEST);
       }
 
-      return {
-        status: 'success',
-        data: job,
-      };
+      return job;
     } catch (error) {
       throw error;
     }

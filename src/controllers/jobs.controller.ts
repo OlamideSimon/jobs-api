@@ -61,8 +61,12 @@ export class JobsController {
   @ApiOperation({ summary: 'Get a job by ID' })
   @ApiResponse({ status: 200, description: 'Job retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Job not found' })
-  getJobHandler(@Param('id') id: string) {
-    return this.jobService.getJob(id);
+  async getJobHandler(@Param('id') id: string) {
+    const job = await this.jobService.getJob(id);
+    return {
+      status: 'success',
+      data: job,
+    };
   }
 
   @Patch(':id')
