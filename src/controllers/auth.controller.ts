@@ -1,6 +1,14 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDTO, RegistrationDTO } from 'src/dto/create/auth.createDto';
+import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from 'src/services/auth.service';
 
 @Controller('auth')
@@ -25,5 +33,11 @@ export class AuthController {
   @ApiResponse({ status: 400, description: 'Bad request' })
   registerSeekerHandler(@Body() data: RegistrationDTO) {
     return this.authService.register(data);
+  }
+
+  @Get('me')
+  @UseGuards(AuthGuard)
+  getLoggedInUser(@Request() req: any) {
+    return req.user;
   }
 }

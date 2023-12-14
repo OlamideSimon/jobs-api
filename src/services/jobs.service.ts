@@ -36,6 +36,7 @@ export class JobService {
       const jobs = await this.jobRepository.find({
         order: { created_at: 'ASC' },
         where: { isOpen: true },
+        relations: { employer: true },
       });
 
       return {
@@ -51,6 +52,7 @@ export class JobService {
     try {
       const jobs = await this.jobRepository.find({
         where: { isFeatured: true, isOpen: true },
+        relations: { employer: true },
       });
 
       return {
@@ -64,7 +66,10 @@ export class JobService {
 
   async getJob(id: string) {
     try {
-      const job = await this.jobRepository.findOneBy({ id });
+      const job = await this.jobRepository.findOne({
+        where: { id },
+        relations: { employer: true },
+      });
 
       if (!job) {
         throw new HttpException('Job does not exist', HttpStatus.BAD_REQUEST);

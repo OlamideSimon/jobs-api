@@ -6,7 +6,7 @@ import { Applications } from './applications.entity';
 
 @Entity()
 export class Jobs extends Model {
-  @ManyToOne(() => Employers, { eager: true })
+  @ManyToOne(() => Employers)
   employer: Employers;
 
   @Column()
