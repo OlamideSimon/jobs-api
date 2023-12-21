@@ -1,6 +1,5 @@
 export enum Status {
   PENDING = 'pending',
-  ACCEPTED = 'accepted',
   REJECTED = 'rejected',
   REVIEWED = 'reviewed',
 }
@@ -58,4 +57,13 @@ export enum IndustriesType {
 export enum UserType {
   Seeker = 'seeker',
   Company = 'company',
+}
+
+export enum Levels {
+  'no experience',
+  'internship & graduate',
+  'entry',
+  'mid',
+  'senior',
+  'executive',
 }
