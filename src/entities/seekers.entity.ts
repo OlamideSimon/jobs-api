@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import User from './user.base';
 import Model from './base.entity';
-import { Levels } from 'src/utils/enums';
+import { JobAvailabilityStatus, Levels } from 'src/utils/enums';
 
 @Entity()
 export class JobSeekers extends User {
@@ -33,6 +33,13 @@ export class JobSeekers extends User {
 
   @Column({ nullable: true })
   location: string;
+
+  @Column({
+    type: 'enum',
+    enum: JobAvailabilityStatus,
+    default: JobAvailabilityStatus.ActivelySeeking,
+  })
+  availability: JobAvailabilityStatus;
 
   @Column({ default: 'job_seeker' })
   role: string;
@@ -119,4 +126,7 @@ export class Education extends Model {
 
   @Column({ type: 'date', nullable: true })
   endDate?: Date;
+
+  @Column({ type: 'boolean', nullable: true })
+  isStudying?: boolean;
 }

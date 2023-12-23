@@ -17,6 +17,19 @@ export enum Availability {
   OTHERS = 'others',
 }
 
+export enum JobAvailabilityStatus {
+  OpenForOpportunities = 'Open for Opportunities',
+  NotLooking = 'Not Looking',
+  ActivelySeeking = 'Actively Seeking',
+  PassiveJobSeeker = 'Passive Job Seeker',
+  ConsideringOffers = 'Considering Offers',
+  FreelanceContractWork = 'Freelance/Contract Work',
+  PartTimeAvailability = 'Part-Time Availability',
+  RemoteWork = 'Remote Work',
+  InternshipSeeker = 'Internship Seeker',
+  TemporaryPositions = 'Temporary Positions',
+}
+
 export enum JobsType {
   FULL_TIME = 'full',
   PART_TIME = 'part',
