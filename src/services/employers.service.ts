@@ -50,4 +50,15 @@ export class EmployersService {
     await this.employersRepository.remove(employer);
     return employer;
   }
+
+  async getAllApplicantsForJobsUnderEmployer(id: string) {
+    const employer = await this.employersRepository.findOneBy({ id });
+    const jobs = await employer.jobs;
+
+    const applicants = jobs.reduce((acc, job) => {
+      return acc.concat(job.applications);
+    }, []);
+
+    return applicants;
+  }
 }

@@ -6,6 +6,7 @@ import {
   Get,
   Param,
   Patch,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -65,6 +66,29 @@ export class EmployersController {
       req?.user.id,
       updateEmployerDTO,
     );
+  }
+
+  // generate Get handler for get all applicants for jobs under employer
+  @Get('/applicants')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all applicants for jobs under employer' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Get all applicants for jobs under employer',
+    isArray: true,
+  })
+  async getAllApplicantsForJobsUnderEmployer(@Request() req: any) {
+    const response =
+      await this.employersService.getAllApplicantsForJobsUnderEmployer(
+        req?.user?.id,
+      );
+
+    return {
+      status: 'success',
+      data: response,
+    };
   }
 
   @Delete(':id')
