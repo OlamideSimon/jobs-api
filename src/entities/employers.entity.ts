@@ -2,7 +2,25 @@ import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
 import User from './user.base';
 import { IndustriesType } from 'src/utils/enums';
 import { Jobs } from './jobs.entity';
+import Model from './base.entity';
 
+@Entity()
+export class SocialLink extends Model {
+  @Column({ nullable: true })
+  instagram: string;
+
+  @Column({ nullable: true })
+  facebook: string;
+
+  @Column({ nullable: true })
+  twitter: string;
+
+  @Column({ nullable: true })
+  linkedin: string;
+
+  @Column({ nullable: true })
+  youtube: string;
+}
 @Entity()
 export class Employers extends User {
   @Column()
@@ -42,22 +60,4 @@ export class Employers extends User {
 
   @OneToMany(() => Jobs, (jobs) => jobs.employer, { eager: true })
   jobs: Jobs[];
-}
-
-@Entity()
-export class SocialLink {
-  @Column({ nullable: true })
-  instagram: string;
-
-  @Column({ nullable: true })
-  facebook: string;
-
-  @Column({ nullable: true })
-  twitter: string;
-
-  @Column({ nullable: true })
-  linkedin: string;
-
-  @Column({ nullable: true })
-  youtube: string;
 }
