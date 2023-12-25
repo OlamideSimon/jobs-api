@@ -1,7 +1,11 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import User from './user.base';
 import Model from './base.entity';
-import { JobAvailabilityStatus, Levels } from 'src/utils/enums';
+import {
+  JobAvailabilityStatus,
+  Levels,
+  NotificationPreferences,
+} from 'src/utils/enums';
 
 @Entity()
 export class JobSeekers extends User {
@@ -17,9 +21,6 @@ export class JobSeekers extends User {
   @Column({ type: 'text', nullable: true })
   resumeUrl: string;
 
-  @Column({ type: 'bytea', nullable: true })
-  resumeData: Buffer;
-
   @Column('text', { array: true, nullable: true })
   skills: string[];
 
@@ -28,7 +29,9 @@ export class JobSeekers extends User {
   })
   experiences: Experience[];
 
-  @OneToMany(() => Education, (education) => education.jobSeeker)
+  @OneToMany(() => Education, (education) => education.jobSeeker, {
+    eager: true,
+  })
   education: Education[];
 
   @Column({ nullable: true })
@@ -40,6 +43,9 @@ export class JobSeekers extends User {
     default: JobAvailabilityStatus.ActivelySeeking,
   })
   availability: JobAvailabilityStatus;
+
+  @Column({ type: 'enum', enum: NotificationPreferences })
+  notificationPreferences: NotificationPreferences[];
 
   @Column({ default: 'job_seeker' })
   role: string;
@@ -69,8 +75,8 @@ export class Experience extends Model {
   @Column({ type: 'date', nullable: true })
   endDate?: Date;
 
-  @Column('simple-array')
-  responsibilities: string[];
+  @Column()
+  responsibilities: string;
 
   @Column({ type: 'boolean', nullable: true })
   isCurrentRole?: boolean;

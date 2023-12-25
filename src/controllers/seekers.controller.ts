@@ -87,4 +87,18 @@ export class SeekersController {
   getSeekerHandler(@Param('id') id: string) {
     return this.seekerService.getSeeker(id);
   }
+
+  @Delete(':id')
+  @Role('admin')
+  @UseGuards(AuthGuard, RoleGuard)
+  deleteSeekerHandler(@Param('id') id: string) {
+    return this.seekerService.deleteSeeker(id);
+  }
+
+  @Delete()
+  @Role('seeker')
+  @UseGuards(AuthGuard, RoleGuard)
+  deleteSelfHandler(@Request() req: any) {
+    return this.seekerService.deleteSeeker(req?.user);
+  }
 }

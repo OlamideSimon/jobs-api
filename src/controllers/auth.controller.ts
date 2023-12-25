@@ -7,7 +7,12 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LoginDTO, RegistrationDTO } from 'src/dto/create/auth.createDto';
+import {
+  LoginDTO,
+  RegistrationDTO,
+  UpdateEmailDTO,
+  UpdatePasswordDTO,
+} from 'src/dto/create/auth.createDto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { AuthService } from 'src/services/auth.service';
 
@@ -38,6 +43,18 @@ export class AuthController {
   @Get('me')
   @UseGuards(AuthGuard)
   getLoggedInUser(@Request() req: any) {
-    return req.user;
+    return this.authService.getMe(req?.user?.id);
+  }
+
+  @Post('update-email')
+  @UseGuards(AuthGuard)
+  updateEmailHandler(@Body() data: UpdateEmailDTO, @Request() req: any) {
+    return this.authService.updateEmail(req?.user, data);
+  }
+
+  @Post('update-password')
+  @UseGuards(AuthGuard)
+  updatePasswordHandler(@Body() data: UpdatePasswordDTO, @Request() req: any) {
+    return this.authService.updatePassword(req?.user, data);
   }
 }

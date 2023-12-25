@@ -66,4 +66,27 @@ export class SeekerService {
   async getSeeker(id: string) {
     return id;
   }
+
+  async deleteSeeker(id: string) {
+    const seeker = await this.jobSeekerRepository.findOneBy({ id });
+    if (!seeker) {
+      return {
+        status: 'error',
+        message: 'Seeker not found',
+      };
+    }
+    seeker.remove();
+    return {
+      status: 'success',
+      message: 'Seeker deleted successfully',
+    };
+  }
+
+  async deleteSelf(user: JobSeekers) {
+    user.remove();
+    return {
+      status: 'success',
+      message: 'Seeker deleted successfully',
+    };
+  }
 }

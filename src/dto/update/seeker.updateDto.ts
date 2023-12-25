@@ -71,8 +71,8 @@ export class ExperienceDTO {
   @IsOptional()
   endDate?: Date;
 
-  @IsArray()
-  responsibilities: string[];
+  @IsString()
+  responsibilities: string;
 
   @IsBoolean()
   @IsOptional()

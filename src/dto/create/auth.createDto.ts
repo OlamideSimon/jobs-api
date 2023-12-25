@@ -74,10 +74,44 @@ export class RegistrationDTO {
   @ApiProperty()
   email: string;
 
-  @IsString()
-  @IsNotEmpty({ message: 'Password is required.' })
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/,
+    {
+      message:
+        'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.',
+    },
+  )
   @ApiProperty()
   password: string;
+}
+
+export class UpdateEmailDTO {
+  @IsEmail()
+  @IsNotEmpty({ message: 'Email is required.' })
+  @ApiProperty()
+  newEmail: string;
+}
+
+export class UpdatePasswordDTO {
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/,
+    {
+      message:
+        'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.',
+    },
+  )
+  @ApiProperty()
+  oldPassword: string;
+
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/,
+    {
+      message:
+        'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.',
+    },
+  )
+  @ApiProperty()
+  newPassword: string;
 }
 
 // export class RegisterSeekerDTO {

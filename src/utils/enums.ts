@@ -80,3 +80,9 @@ export enum Levels {
   'senior',
   'executive',
 }
+
+export enum NotificationPreferences {
+  APPLICATIONS = 'applications',
+  JOBS = 'jobs',
+  ALL = 'all',
+}
