@@ -44,7 +44,11 @@ export class JobSeekers extends User {
   })
   availability: JobAvailabilityStatus;
 
-  @Column({ type: 'enum', enum: NotificationPreferences })
+  @Column({
+    type: 'enum',
+    enum: NotificationPreferences,
+    default: [NotificationPreferences.APPLICATIONS],
+  })
   notificationPreferences: NotificationPreferences[];
 
   @Column({ default: 'job_seeker' })
