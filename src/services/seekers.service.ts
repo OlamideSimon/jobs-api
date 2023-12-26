@@ -64,7 +64,14 @@ export class SeekerService {
   }
 
   async getSeeker(id: string) {
-    return id;
+    const seeker = await this.jobSeekerRepository.findOneBy({ id });
+    if (!seeker) {
+      return {
+        status: 'error',
+        message: 'Seeker not found',
+      };
+    }
+    return seeker;
   }
 
   async deleteSeeker(id: string) {

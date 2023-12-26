@@ -84,8 +84,13 @@ export class SeekersController {
   }
 
   @Get(':id')
-  getSeekerHandler(@Param('id') id: string) {
-    return this.seekerService.getSeeker(id);
+  async getSeekerHandler(@Param('id') id: string) {
+    const response = await this.seekerService.getSeeker(id);
+    return {
+      status: 'success',
+      message: 'Seeker found successfully',
+      data: response,
+    };
   }
 
   @Delete(':id')

@@ -68,7 +68,6 @@ export class EmployersController {
     );
   }
 
-  // generate Get handler for get all applicants for jobs under employer
   @Get('/applicants')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
