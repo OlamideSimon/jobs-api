@@ -2,6 +2,7 @@ export enum Status {
   PENDING = 'pending',
   REJECTED = 'rejected',
   REVIEWED = 'reviewed',
+  SHORTLISTED = 'shortlisted',
 }
 
 export enum Gender {

@@ -53,10 +53,10 @@ export class EmployersService {
 
   async getAllApplicantsForJobsUnderEmployer(id: string) {
     const employer = await this.employersRepository.findOneBy({ id });
-    const jobs = await employer.jobs;
+    const jobs = employer.jobs;
 
     const applicants = jobs.reduce((acc, job) => {
-      return acc.concat(job.applications);
+      return acc.concat({ ...job.applications, jobId: job.id });
     }, []);
 
     return applicants;

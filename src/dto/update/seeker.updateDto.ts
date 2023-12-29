@@ -33,6 +33,11 @@ export class UpdateSeekerDTO {
   @IsOptional()
   contact: string;
 
+  @IsString()
+  @ApiProperty()
+  @IsOptional()
+  currentRole: string;
+
   @IsOptional()
   @IsUrl()
   resumeUrl: string;

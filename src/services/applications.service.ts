@@ -44,4 +44,25 @@ export class ApplicationService {
       throw new Error(error);
     }
   }
+
+  async getApplicationBySeekerId(
+    companyId: string,
+    jobId: string,
+    applicantId: string,
+  ) {
+    try {
+      const application = await this.applicationRepository.findOne({
+        where: {
+          jobSeeker: { id: applicantId },
+          job: { employer: { id: companyId }, isOpen: true, id: jobId },
+        },
+        relations: ['jobSeeker', 'job'],
+      });
+
+      return application || null;
+    } catch (error) {
+      console.error('Error fetching job application:', error);
+      throw new Error('An error occurred while fetching the job application.');
+    }
+  }
 }

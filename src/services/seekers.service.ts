@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   EducationDTO,
@@ -7,6 +7,8 @@ import {
 } from 'src/dto/update/seeker.updateDto';
 import { Education, Experience, JobSeekers } from 'src/entities/seekers.entity';
 import { Repository } from 'typeorm';
+
+import PDFDocument from 'pdfkit';
 
 @Injectable()
 export class SeekerService {
@@ -95,5 +97,65 @@ export class SeekerService {
       status: 'success',
       message: 'Seeker deleted successfully',
     };
+  }
+
+  async generateCV(jobSeekerId: string) {
+    const jobSeeker = await this.jobSeekerRepository.findOneOrFail({
+      where: { id: jobSeekerId },
+      relations: ['experiences', 'educations'],
+    });
+
+    if (!jobSeeker) {
+      throw new NotFoundException(`JobSeeker with id ${jobSeekerId} not found`);
+    }
+
+    const pdf = new PDFDocument();
+    pdf.font('Helvetica-Bold');
+
+    // Header
+    pdf.fontSize(20).text(`Curriculum Vitae`, { align: 'center' });
+    pdf
+      .fontSize(16)
+      .text(`${jobSeeker.fName} ${jobSeeker.lName}`, { align: 'center' });
+    pdf.moveDown(1);
+
+    // Experiences
+    pdf.fontSize(18).text('Experiences');
+    jobSeeker.experiences.forEach((experience) => {
+      pdf.moveDown(0.5);
+      pdf.fontSize(16).text(`${experience.title} at ${experience.employer}`);
+      pdf.fontSize(14).text(`Location: ${experience.country}`);
+      pdf
+        .fontSize(14)
+        .text(
+          `Duration: ${experience.startDate.toDateString()} - ${
+            experience.isCurrentRole
+              ? 'Present'
+              : experience.endDate.toDateString()
+          }`,
+        );
+      pdf.fontSize(14).text(`Responsibilities: ${experience.responsibilities}`);
+      pdf.moveDown(0.5);
+    });
+
+    // Education
+    pdf.moveDown(1);
+    pdf.fontSize(18).text('Education');
+    jobSeeker.education.forEach((education) => {
+      pdf.moveDown(0.5);
+      pdf.fontSize(16).text(`${education.degree} in ${education.fieldOfStudy}`);
+      pdf.fontSize(14).text(`Institution: ${education.institution}`);
+      pdf
+        .fontSize(14)
+        .text(
+          `Duration: ${education.startDate.toDateString()} - ${
+            education.isStudying ? 'Present' : education.endDate.toDateString()
+          }`,
+        );
+      pdf.moveDown(0.5);
+    });
+
+    pdf.end();
+    return pdf;
   }
 }

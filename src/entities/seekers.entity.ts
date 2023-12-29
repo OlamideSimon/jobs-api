@@ -12,11 +12,20 @@ export class JobSeekers extends User {
   @Column()
   fName: string;
 
+  @Column({ nullable: true })
+  currentRole: string;
+
+  @Column({ nullable: true })
+  about: string;
+
   @Column()
   lName: string;
 
   @Column({ nullable: true })
   phone: string;
+
+  @Column({ nullable: true })
+  website: string;
 
   @Column({ type: 'text', nullable: true })
   resumeUrl: string;

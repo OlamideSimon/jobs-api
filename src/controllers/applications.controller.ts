@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -51,6 +52,25 @@ export class ApplicationsController {
   async getSeekerApplicationsHandler(@Request() req: any) {
     const applications = await this.applicationService.getSeekerApplications(
       req?.user?.id,
+    );
+    return {
+      status: 'success',
+      data: applications,
+    };
+  }
+
+  @Get('applied/:jobId/:applicantId')
+  @Role('company')
+  @UseGuards(AuthGuard, RoleGuard)
+  getApplicationBySeekerIdHandler(
+    @Request() req: any,
+    @Param('jobId') jobId: string,
+    @Param('applicantId') applicantId: string,
+  ) {
+    const applications = this.applicationService.getApplicationBySeekerId(
+      req?.user?.id,
+      jobId,
+      applicantId,
     );
     return {
       status: 'success',
