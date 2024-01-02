@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsBoolean,
-  IsDateString,
+  IsDate,
   IsEmail,
   IsEnum,
   IsNotEmpty,
@@ -10,7 +10,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { Levels } from 'src/utils/enums';
+import { JobAvailabilityStatus, Levels } from 'src/utils/enums';
 
 export class UpdateSeekerDTO {
   @IsString()
@@ -23,6 +23,16 @@ export class UpdateSeekerDTO {
   @IsOptional()
   lName: string;
 
+  @IsString()
+  @ApiProperty()
+  @IsOptional()
+  about: string;
+
+  @IsEnum(JobAvailabilityStatus)
+  @ApiProperty()
+  @IsOptional()
+  availability: JobAvailabilityStatus;
+
   @IsEmail()
   @ApiProperty()
   @IsOptional()
@@ -31,7 +41,7 @@ export class UpdateSeekerDTO {
   @IsString()
   @ApiProperty()
   @IsOptional()
-  contact: string;
+  phone: string;
 
   @IsString()
   @ApiProperty()
@@ -69,18 +79,17 @@ export class ExperienceDTO {
   @IsString()
   country: string;
 
-  @IsDateString()
+  @IsDate()
   startDate: Date;
 
-  @IsDateString()
   @IsOptional()
-  endDate?: Date;
+  endDate?: Date | undefined;
 
   @IsString()
   responsibilities: string;
 
-  @IsBoolean()
   @IsOptional()
+  @IsBoolean()
   isCurrentRole?: boolean;
 }
 
@@ -98,14 +107,12 @@ export class EducationDTO {
   fieldOfStudy: string;
 
   @IsNotEmpty()
-  @IsString()
-  country: string;
-
-  @IsNotEmpty()
-  @IsDateString()
+  @IsDate()
   startDate: Date;
 
-  @IsDateString()
   @IsOptional()
-  endDate?: Date;
+  endDate?: Date | undefined;
+
+  @IsBoolean()
+  isStudying?: boolean;
 }

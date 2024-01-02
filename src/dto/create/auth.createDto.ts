@@ -16,22 +16,16 @@ export class LoginDTO {
   @ApiProperty()
   email: string;
 
-  @Matches(
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()-_+=])[A-Za-z\d!@#$%^&*()-_+=]{8,}$/,
-    {
-      message:
-        'Password must contain at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 8 characters long.',
-    },
-  )
+  @IsString()
   @ApiProperty()
   password: string;
 
   @IsEnum(UserType, {
-    message: 'Invalid user_type. Must be either "seeker" or "company".',
+    message: 'Invalid user_type. Must be either "seeker" or "employer".',
   })
   @ApiProperty({
     enum: UserType,
-    description: 'User type: "seeker" or "company".',
+    description: 'User type: "seeker" or "employer".',
   })
   account_type: UserType;
 
@@ -43,11 +37,11 @@ export class LoginDTO {
 
 export class RegistrationDTO {
   @IsEnum(UserType, {
-    message: 'Invalid user_type. Must be either "seeker" or "company".',
+    message: 'Invalid user_type. Must be either "seeker" or "employer".',
   })
   @ApiProperty({
     enum: UserType,
-    description: 'User type: "seeker" or "company".',
+    description: 'User type: "seeker" or "employer".',
   })
   account_type: UserType;
 
@@ -65,7 +59,7 @@ export class RegistrationDTO {
 
   @IsString()
   @IsNotEmpty({ message: 'Company name is required.' })
-  @ValidateIf((object) => object.user_type === UserType.Company)
+  @ValidateIf((object) => object.user_type === UserType.Employer)
   @ApiProperty({ required: false })
   company_name?: string;
 

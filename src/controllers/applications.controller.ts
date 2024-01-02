@@ -20,7 +20,7 @@ export class ApplicationsController {
   constructor(private applicationService: ApplicationService) {}
 
   @Post()
-  @Role('seeker')
+  @Role('job_seeker')
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Make a new Application' })
   @ApiResponse({
@@ -42,7 +42,7 @@ export class ApplicationsController {
   }
 
   @Get('applied')
-  @Role('seeker')
+  @Role('job_seeker')
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Get a list of Applications by applicant' })
   @ApiResponse({
@@ -60,7 +60,7 @@ export class ApplicationsController {
   }
 
   @Get('applied/:jobId/:applicantId')
-  @Role('company')
+  @Role('employer')
   @UseGuards(AuthGuard, RoleGuard)
   getApplicationBySeekerIdHandler(
     @Request() req: any,

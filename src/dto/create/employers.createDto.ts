@@ -27,10 +27,10 @@ export class CreateEmployersDTO {
   @ApiProperty({ required: false })
   companyDescription?: string;
 
-  @IsOptional()
-  @IsString()
-  @ApiProperty({ required: false })
-  companyInfo?: string;
+  // @IsOptional()
+  // @IsString()
+  // @ApiProperty({ required: false })
+  // companyInfo?: string;
 
   @IsOptional()
   @IsString()

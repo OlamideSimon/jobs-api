@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
 import User from './user.base';
 import { IndustriesType } from 'src/utils/enums';
 import { Jobs } from './jobs.entity';
@@ -56,6 +56,7 @@ export class Employers extends User {
   role: string;
 
   @OneToOne(() => SocialLink, { eager: true })
+  @JoinColumn()
   socialLink: SocialLink;
 
   @OneToMany(() => Jobs, (jobs) => jobs.employer, { eager: true })

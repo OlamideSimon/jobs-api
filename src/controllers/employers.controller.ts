@@ -25,8 +25,8 @@ export class EmployersController {
   constructor(private employersService: EmployersService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
+  // @UseGuards(AuthGuard)
+  // @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all employers' })
   @ApiResponse({
     status: 200,

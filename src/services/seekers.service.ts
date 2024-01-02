@@ -23,18 +23,27 @@ export class SeekerService {
     private experienceRepository: Repository<Experience>,
   ) {}
 
+  async getSeekers() {
+    const seekers = await this.jobSeekerRepository.find();
+
+    return {
+      status: 'success',
+      data: seekers,
+    };
+  }
+
   async addSeekerEducation(user: JobSeekers, data: EducationDTO) {
     const newSeekerEducation = await this.educationRepository.save(
       this.educationRepository.create({ ...data, jobSeeker: user }),
     );
-    return { newSeekerEducation };
+    return { ...newSeekerEducation };
   }
 
   async addSeekerExperience(user: JobSeekers, data: ExperienceDTO) {
     const newSeekerExperience = await this.experienceRepository.save(
       this.experienceRepository.create({ ...data, jobSeeker: user }),
     );
-    return { newSeekerExperience };
+    return { ...newSeekerExperience };
   }
 
   async updateSeeker(userId: string, seekerDto: UpdateSeekerDTO) {

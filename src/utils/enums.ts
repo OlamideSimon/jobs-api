@@ -70,16 +70,16 @@ export enum IndustriesType {
 
 export enum UserType {
   Seeker = 'seeker',
-  Company = 'company',
+  Employer = 'employer',
 }
 
 export enum Levels {
-  'no experience',
-  'internship & graduate',
-  'entry',
-  'mid',
-  'senior',
-  'executive',
+  NoExperience = 'no experience',
+  InternshipAndGraduate = 'internship & graduate',
+  Entry = 'entry',
+  Mid = 'mid',
+  Senior = 'senior',
+  Executive = 'executive',
 }
 
 export enum NotificationPreferences {

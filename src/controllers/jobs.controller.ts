@@ -29,12 +29,12 @@ export class JobsController {
   constructor(private jobService: JobService) {}
 
   @Post()
-  @Role('company')
+  @Role('employer')
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Create a new job' })
   @ApiResponse({ status: 201, description: 'Job created successfully' })
   createJobHandler(@Body() body: CreateJobDTO, @Request() req: any) {
-    return this.jobService.createJob(body, req.user);
+    return this.jobService.createJob(body, req?.user);
   }
 
   @Get()
@@ -70,7 +70,7 @@ export class JobsController {
   }
 
   @Patch(':id')
-  @Role('company')
+  @Role('employer')
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Update a job by ID' })
   @ApiResponse({ status: 200, description: 'Job updated successfully' })
@@ -80,7 +80,7 @@ export class JobsController {
   }
 
   @Delete(':id')
-  @Role(['company', 'admin'])
+  @Role(['employer', 'admin'])
   @UseGuards(AuthGuard, RoleGuard)
   @ApiOperation({ summary: 'Delete a job by ID' })
   @ApiResponse({ status: 200, description: 'Job deleted successfully' })

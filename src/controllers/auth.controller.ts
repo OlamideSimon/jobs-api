@@ -30,7 +30,7 @@ export class AuthController {
   }
 
   @Post('register')
-  @ApiOperation({ summary: 'Register as a new user(seeker or company)' })
+  @ApiOperation({ summary: 'Register as a new user(job seeker or company)' })
   @ApiResponse({
     status: 201,
     description: 'Job seeker registration successful',

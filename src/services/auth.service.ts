@@ -35,7 +35,7 @@ export class AuthService {
         account = await this.seekerRepository.findOneBy({
           email: loginDto.email,
         });
-      } else if (loginDto.account_type === 'company') {
+      } else if (loginDto.account_type === 'employer') {
         account = await this.employersRepository.findOneBy({
           email: loginDto.email,
         });
@@ -49,15 +49,25 @@ export class AuthService {
         };
       }
 
-      await comparePassword(loginDto.password, account.password);
+      const validatePassword = await comparePassword(
+        loginDto.password,
+        account.password,
+      );
+      if (!validatePassword) {
+        return {
+          status: 'error',
+          message: 'Invalid password. Please try again.',
+        };
+      }
       const access_token = await this.generateToken(
-        { id: account.id, email: account.email },
+        { ...account },
         loginDto.remember_me,
       );
 
       return {
         status: 'success',
         access_token,
+        role: account.role,
       };
     } catch (error) {
       throw new Error(error);
@@ -75,7 +85,7 @@ export class AuthService {
             lName: registerDto.last_name,
           }),
         );
-      } else if (registerDto.account_type === 'company') {
+      } else if (registerDto.account_type === 'employer') {
         account = await this.employersRepository.save(
           this.employersRepository.create({
             ...registerDto,
@@ -84,14 +94,13 @@ export class AuthService {
       }
 
       const access_token = await this.generateToken({
-        id: account.id,
-        email: account.email,
+        ...account,
       });
 
       return {
         status: 'success',
         access_token,
-        data: account,
+        role: account.role,
       };
     } catch (error) {
       if (error.code === '23505' && error.detail.includes('email')) {
@@ -133,7 +142,11 @@ export class AuthService {
   async updateEmail(user: JobSeekers | Employers, data: UpdateEmailDTO) {
     try {
       user.email = data.newEmail;
-      user.save();
+      if (user.role === 'seeker') {
+        await this.seekerRepository.preload({ id: user?.id, ...user });
+      } else {
+        await this.employersRepository.preload({ id: user?.id, ...user });
+      }
 
       return {
         status: 'success',
@@ -147,6 +160,8 @@ export class AuthService {
         );
       }
 
+      console.log(error);
+
       throw new HttpException(
         'Internal Server Error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -158,7 +173,11 @@ export class AuthService {
     try {
       await comparePassword(data.oldPassword, user.password);
       user.password = await hashPassword(data.newPassword);
-      await user.save();
+      if (user.role === 'seeker') {
+        await this.seekerRepository.preload({ id: user?.id, ...user });
+      } else {
+        await this.employersRepository.preload({ id: user?.id, ...user });
+      }
       return {
         status: 'success',
         message: 'Password updated successfully',

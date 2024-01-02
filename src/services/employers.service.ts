@@ -18,7 +18,12 @@ export class EmployersService {
   }
 
   async getAllEmployers() {
-    return this.employersRepository.find();
+    const employers = await this.employersRepository.find();
+
+    return {
+      status: 'success',
+      data: employers,
+    };
   }
 
   async getEmployerById(id: string) {

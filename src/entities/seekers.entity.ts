@@ -30,6 +30,9 @@ export class JobSeekers extends User {
   @Column({ type: 'text', nullable: true })
   resumeUrl: string;
 
+  @Column({ type: 'bytea', nullable: true })
+  resumeData: Buffer;
+
   @Column('text', { array: true, nullable: true })
   skills: string[];
 
