@@ -41,22 +41,22 @@ export class Jobs extends Model {
   @Column({
     type: 'enum',
     enum: IndustriesType,
-    default: [IndustriesType.Miscellaneous],
+    default: IndustriesType.Miscellaneous,
   })
-  industry: IndustriesType[];
+  industry: IndustriesType;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, nullable: true })
   skills: string[];
 
   @Column({
     type: 'enum',
     enum: ExperienceLevel,
-    default: ExperienceLevel.ENTRY,
+    default: ExperienceLevel.Entry,
   })
   experienceLevel: ExperienceLevel;
 
-  @Column({ type: 'numeric', precision: 10, scale: 2 })
-  salary: number;
+  @Column({ type: 'int', array: true })
+  salary: number[];
 
   @Column('date')
   deadline: Date;

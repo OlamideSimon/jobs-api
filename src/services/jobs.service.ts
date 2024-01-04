@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateJobDTO } from 'src/dto/create/job.createDto';
+import { CreateJobDto } from 'src/dto/create/job.createDto';
 import { UpdateJobsDTO } from 'src/dto/update/job.updateDto';
 import { Employers } from 'src/entities/employers.entity';
 import { Jobs } from 'src/entities/jobs.entity';
@@ -13,7 +13,7 @@ export class JobService {
     private readonly jobRepository: Repository<Jobs>,
   ) {}
 
-  async createJob(jobDto: CreateJobDTO, user: Employers) {
+  async createJob(jobDto: CreateJobDto, user: Employers) {
     try {
       const company = await this.jobRepository.save(
         this.jobRepository.create({

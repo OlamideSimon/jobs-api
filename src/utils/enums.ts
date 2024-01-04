@@ -40,9 +40,12 @@ export enum JobsType {
 }
 
 export enum ExperienceLevel {
-  ENTRY = 'entry',
-  INTERMEDIATE = 'intermediate',
-  SENIOR = 'senior',
+  NoExperience = 'no experience',
+  InternshipAndGraduate = 'internship & graduate',
+  Entry = 'entry',
+  Mid = 'mid',
+  Senior = 'senior',
+  Executive = 'executive',
 }
 
 export enum IndustriesType {

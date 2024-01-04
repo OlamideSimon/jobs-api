@@ -1,80 +1,83 @@
-import { ApiProperty, ApiTags } from '@nestjs/swagger';
 import {
   IsArray,
+  IsBoolean,
   IsDate,
   IsEnum,
-  IsNumber,
-  IsString,
-  ArrayNotEmpty,
-  IsBoolean,
+  IsNotEmpty,
   IsOptional,
+  IsString,
+  IsNumber,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
 
-@ApiTags('Jobs')
-export class CreateJobDTO {
+export class CreateJobDto {
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   title: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   responsibilities: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   who_you_are: string;
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   nice_to_haves: string;
 
   @ApiProperty()
   @IsArray()
-  @ArrayNotEmpty()
   @IsString({ each: true })
   categories: string[];
 
   @ApiProperty()
   @IsString()
+  @IsNotEmpty()
   location: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: JobsType, isArray: true })
   @IsArray()
-  @ArrayNotEmpty()
   @IsEnum(JobsType, { each: true })
   type: JobsType[];
 
-  @ApiProperty()
-  @IsArray()
-  @ArrayNotEmpty()
-  @IsEnum(IndustriesType, { each: true })
-  industry: IndustriesType[];
+  @ApiProperty({ enum: IndustriesType })
+  @IsEnum(IndustriesType)
+  industry: IndustriesType;
 
   @ApiProperty()
   @IsArray()
-  @ArrayNotEmpty()
   @IsString({ each: true })
-  skills: string[];
+  @IsOptional()
+  skills?: string[];
 
-  @ApiProperty()
+  @ApiProperty({ enum: ExperienceLevel })
   @IsEnum(ExperienceLevel)
   experienceLevel: ExperienceLevel;
 
-  @ApiProperty()
-  @IsNumber()
-  salary: number;
+  @ApiProperty({ type: [Number] })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  salary: number[];
 
-  @ApiProperty()
+  @ApiProperty({ type: Date })
   @IsDate()
+  @IsNotEmpty()
   deadline: Date;
 
   @ApiProperty()
   @IsBoolean()
-  @IsOptional()
+  @IsNotEmpty()
   isFeatured: boolean;
 }
