@@ -5,7 +5,7 @@ import {
   ExperienceDTO,
   UpdateSeekerDTO,
 } from 'src/dto/update/seeker.updateDto';
-import { Education, Experience, JobSeekers } from 'src/entities/seekers.entity';
+import { Education, Experience, Seekers } from 'src/entities/seekers.entity';
 import { Repository } from 'typeorm';
 
 import PDFDocument from 'pdfkit';
@@ -13,8 +13,8 @@ import PDFDocument from 'pdfkit';
 @Injectable()
 export class SeekerService {
   constructor(
-    @InjectRepository(JobSeekers)
-    private jobSeekerRepository: Repository<JobSeekers>,
+    @InjectRepository(Seekers)
+    private jobSeekerRepository: Repository<Seekers>,
 
     @InjectRepository(Education)
     private educationRepository: Repository<Education>,
@@ -32,14 +32,14 @@ export class SeekerService {
     };
   }
 
-  async addSeekerEducation(user: JobSeekers, data: EducationDTO) {
+  async addSeekerEducation(user: Seekers, data: EducationDTO) {
     const newSeekerEducation = await this.educationRepository.save(
       this.educationRepository.create({ ...data, jobSeeker: user }),
     );
     return { ...newSeekerEducation };
   }
 
-  async addSeekerExperience(user: JobSeekers, data: ExperienceDTO) {
+  async addSeekerExperience(user: Seekers, data: ExperienceDTO) {
     const newSeekerExperience = await this.experienceRepository.save(
       this.experienceRepository.create({ ...data, jobSeeker: user }),
     );
@@ -54,7 +54,7 @@ export class SeekerService {
     return await this.jobSeekerRepository.save(seeker);
   }
 
-  async deleteSeekerEducation(user: JobSeekers, id: string) {
+  async deleteSeekerEducation(user: Seekers, id: string) {
     const seekerEducation = await this.educationRepository.findOne({
       where: { id, jobSeeker: { id: user.id } },
     });
@@ -64,7 +64,7 @@ export class SeekerService {
     };
   }
 
-  async deleteSeekerExperience(user: JobSeekers, id: string) {
+  async deleteSeekerExperience(user: Seekers, id: string) {
     const seekerExperience = await this.experienceRepository.findOne({
       where: { id, jobSeeker: { id: user.id } },
     });
@@ -100,7 +100,7 @@ export class SeekerService {
     };
   }
 
-  async deleteSelf(user: JobSeekers) {
+  async deleteSelf(user: Seekers) {
     user.remove();
     return {
       status: 'success',
@@ -123,9 +123,9 @@ export class SeekerService {
 
     // Header
     pdf.fontSize(20).text(`Curriculum Vitae`, { align: 'center' });
-    pdf
-      .fontSize(16)
-      .text(`${jobSeeker.fName} ${jobSeeker.lName}`, { align: 'center' });
+    pdf.fontSize(16).text(`${jobSeeker.first_name} ${jobSeeker.last_name}`, {
+      align: 'center',
+    });
     pdf.moveDown(1);
 
     // Experiences

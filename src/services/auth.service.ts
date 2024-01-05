@@ -13,8 +13,7 @@ import {
   UpdateEmailDTO,
   UpdatePasswordDTO,
 } from 'src/dto/create/auth.createDto';
-import { Employers } from 'src/entities/employers.entity';
-import { JobSeekers } from 'src/entities/seekers.entity';
+import { UserAuth } from 'src/entities/authentication.entity';
 import { comparePassword, hashPassword } from 'src/utils/password';
 import { Repository } from 'typeorm';
 
@@ -22,24 +21,15 @@ import { Repository } from 'typeorm';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    @InjectRepository(Employers)
-    private readonly employersRepository: Repository<Employers>,
-    @InjectRepository(JobSeekers)
-    private readonly seekerRepository: Repository<JobSeekers>,
+    @InjectRepository(UserAuth)
+    private readonly authenticationRepository: Repository<UserAuth>,
   ) {}
 
   async login(loginDto: LoginDTO) {
     try {
-      let account: Employers | JobSeekers;
-      if (loginDto.account_type === 'seeker') {
-        account = await this.seekerRepository.findOneBy({
-          email: loginDto.email,
-        });
-      } else if (loginDto.account_type === 'employer') {
-        account = await this.employersRepository.findOneBy({
-          email: loginDto.email,
-        });
-      }
+      const account = await this.authenticationRepository.findOneBy({
+        email: loginDto.email,
+      });
 
       if (!account) {
         return {
@@ -75,23 +65,14 @@ export class AuthService {
   }
 
   async register(registerDto: RegistrationDTO) {
+    // console.log(registerDto.account_type)
     try {
-      let account: Employers | JobSeekers;
-      if (registerDto.account_type === 'seeker') {
-        account = await this.seekerRepository.save(
-          this.seekerRepository.create({
-            ...registerDto,
-            fName: registerDto.first_name,
-            lName: registerDto.last_name,
-          }),
-        );
-      } else if (registerDto.account_type === 'employer') {
-        account = await this.employersRepository.save(
-          this.employersRepository.create({
-            ...registerDto,
-          }),
-        );
-      }
+      const account = await this.authenticationRepository.save(
+        this.authenticationRepository.create({
+          ...registerDto,
+          role: registerDto.account_type,
+        }),
+      );
 
       const access_token = await this.generateToken({
         ...account,
@@ -115,13 +96,9 @@ export class AuthService {
 
   async getMe(userId: string) {
     try {
-      let user: JobSeekers | Employers;
-      const seeker = await this.seekerRepository.findOneBy({ id: userId });
-      if (seeker) {
-        user = seeker;
-      } else {
-        user = await this.employersRepository.findOneBy({ id: userId });
-      }
+      const user = await this.authenticationRepository.findOneBy({
+        id: userId,
+      });
 
       if (!user) {
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -139,14 +116,10 @@ export class AuthService {
     }
   }
 
-  async updateEmail(user: JobSeekers | Employers, data: UpdateEmailDTO) {
+  async updateEmail(user: UserAuth, data: UpdateEmailDTO) {
     try {
       user.email = data.newEmail;
-      if (user.role === 'seeker') {
-        await this.seekerRepository.preload({ id: user?.id, ...user });
-      } else {
-        await this.employersRepository.preload({ id: user?.id, ...user });
-      }
+      await this.authenticationRepository.save(user);
 
       return {
         status: 'success',
@@ -169,15 +142,12 @@ export class AuthService {
     }
   }
 
-  async updatePassword(user: JobSeekers | Employers, data: UpdatePasswordDTO) {
+  async updatePassword(user: UserAuth, data: UpdatePasswordDTO) {
     try {
       await comparePassword(data.oldPassword, user.password);
       user.password = await hashPassword(data.newPassword);
-      if (user.role === 'seeker') {
-        await this.seekerRepository.preload({ id: user?.id, ...user });
-      } else {
-        await this.employersRepository.preload({ id: user?.id, ...user });
-      }
+      await this.authenticationRepository.save(user);
+
       return {
         status: 'success',
         message: 'Password updated successfully',

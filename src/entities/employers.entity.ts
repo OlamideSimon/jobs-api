@@ -1,8 +1,8 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from 'typeorm';
-import User from './user.base';
 import { IndustriesType } from 'src/utils/enums';
 import { Jobs } from './jobs.entity';
 import Model from './base.entity';
+import { UserAuth } from './authentication.entity';
 
 @Entity()
 export class SocialLink extends Model {
@@ -22,7 +22,10 @@ export class SocialLink extends Model {
   youtube: string;
 }
 @Entity()
-export class Employers extends User {
+export class Employers extends Model {
+  @OneToOne(() => UserAuth)
+  userAuth: UserAuth;
+
   @Column()
   company_name: string;
 
@@ -51,9 +54,6 @@ export class Employers extends User {
 
   @Column({ nullable: true })
   location: string;
-
-  @Column({ default: 'employer' })
-  role: string;
 
   @OneToOne(() => SocialLink, { eager: true })
   @JoinColumn()

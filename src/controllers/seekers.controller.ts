@@ -31,7 +31,7 @@ export class SeekersController {
   }
 
   @Post('education')
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   async addSeekerEducationHandler(
     @Body() data: EducationDTO,
@@ -49,7 +49,7 @@ export class SeekersController {
   }
 
   @Delete('education/:id')
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   async deleteEducationHandler(@Param('id') id: string, @Request() req: any) {
     await this.seekerService.deleteSeekerEducation(req?.user, id);
@@ -60,7 +60,7 @@ export class SeekersController {
   }
 
   @Post('experience')
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   async addSeekerExperienceHandler(
     @Body() data: ExperienceDTO,
@@ -78,7 +78,7 @@ export class SeekersController {
   }
 
   @Delete('experience/:id')
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   async deleteExperienceHandler(@Param('id') id: string, @Request() req: any) {
     await this.seekerService.deleteSeekerExperience(req?.user, id);
@@ -89,7 +89,7 @@ export class SeekersController {
   }
 
   @Patch()
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   async updateSeekerHandler(
     @Body() data: UpdateSeekerDTO,
@@ -121,7 +121,7 @@ export class SeekersController {
   }
 
   @Delete()
-  @Role('job_seeker')
+  @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   deleteSelfHandler(@Request() req: any) {
     return this.seekerService.deleteSeeker(req?.user);

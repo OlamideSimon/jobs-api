@@ -5,7 +5,7 @@ import { Applications } from 'src/entities/applications.entity';
 import { Repository } from 'typeorm';
 import { JobService } from './jobs.service';
 import { SeekerService } from './seekers.service';
-import { JobSeekers } from 'src/entities/seekers.entity';
+import { Seekers } from 'src/entities/seekers.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -18,7 +18,7 @@ export class ApplicationService {
 
   async createApplication(
     applicationDto: CreateApplicationDto,
-    applicant: JobSeekers,
+    applicant: Seekers,
   ) {
     try {
       const job = await this.jobService.getJob(applicationDto.jobId);

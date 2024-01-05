@@ -1,13 +1,13 @@
 import { Column, Entity, ManyToOne } from 'typeorm';
 import Model from './base.entity';
-import { JobSeekers } from './seekers.entity';
+import { Seekers } from './seekers.entity';
 import { Jobs } from './jobs.entity';
 import { Status } from 'src/utils/enums';
 
 @Entity()
 export class Applications extends Model {
-  @ManyToOne(() => JobSeekers)
-  jobSeeker: JobSeekers;
+  @ManyToOne(() => Seekers)
+  jobSeeker: Seekers;
 
   @ManyToOne(() => Jobs, { nullable: true })
   job: Jobs;

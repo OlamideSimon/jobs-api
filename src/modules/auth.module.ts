@@ -3,8 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from 'src/controllers/auth.controller';
-import { Employers } from 'src/entities/employers.entity';
-import { JobSeekers } from 'src/entities/seekers.entity';
+import { UserAuth } from 'src/entities/authentication.entity';
 import { AuthService } from 'src/services/auth.service';
 
 @Module({
@@ -19,7 +18,7 @@ import { AuthService } from 'src/services/auth.service';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Employers, JobSeekers]),
+    TypeOrmModule.forFeature([UserAuth]),
   ],
 })
 export class AuthModule {}

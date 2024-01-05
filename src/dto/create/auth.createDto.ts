@@ -47,19 +47,19 @@ export class RegistrationDTO {
 
   @IsString()
   @IsNotEmpty({ message: 'First name is required.' })
-  @ValidateIf((object) => object.user_type === UserType.Seeker)
+  @ValidateIf((object) => object.account_type === UserType.Seeker)
   @ApiProperty({ required: false })
   first_name?: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Last name is required.' })
-  @ValidateIf((object) => object.user_type === UserType.Seeker)
+  @ValidateIf((object) => object.account_type === UserType.Seeker)
   @ApiProperty({ required: false })
   last_name?: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Company name is required.' })
-  @ValidateIf((object) => object.user_type === UserType.Employer)
+  @ValidateIf((object) => object.account_type === UserType.Employer)
   @ApiProperty({ required: false })
   company_name?: string;
 

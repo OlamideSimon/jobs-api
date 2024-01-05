@@ -1,16 +1,19 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
-import User from './user.base';
+import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import Model from './base.entity';
 import {
   JobAvailabilityStatus,
   Levels,
   NotificationPreferences,
 } from 'src/utils/enums';
+import { UserAuth } from './authentication.entity';
 
 @Entity()
-export class JobSeekers extends User {
+export class Seekers extends Model {
+  @OneToOne(() => UserAuth)
+  userAuth: UserAuth;
+
   @Column()
-  fName: string;
+  first_name: string;
 
   @Column({ nullable: true })
   currentRole: string;
@@ -19,7 +22,7 @@ export class JobSeekers extends User {
   about: string;
 
   @Column()
-  lName: string;
+  last_name: string;
 
   @Column({ nullable: true })
   phone: string;
@@ -62,9 +65,6 @@ export class JobSeekers extends User {
     default: [NotificationPreferences.APPLICATIONS],
   })
   notificationPreferences: NotificationPreferences[];
-
-  @Column({ default: 'job_seeker' })
-  role: string;
 }
 
 @Entity()
@@ -97,42 +97,18 @@ export class Experience extends Model {
   @Column({ type: 'boolean', nullable: true })
   isCurrentRole?: boolean;
 
-  @ManyToOne(() => JobSeekers, (jobSeeker) => jobSeeker.experiences, {
+  @ManyToOne(() => Seekers, (jobSeeker) => jobSeeker.experiences, {
     onDelete: 'CASCADE',
   })
-  jobSeeker: JobSeekers;
-
-  calculateDurationInMonths(startDate, endDate, isCurrentRole): number {
-    if (!endDate || isCurrentRole) {
-      return 0; // Employment is ongoing or end date is not provided
-    }
-
-    startDate = new Date(this.startDate);
-    endDate = new Date(this.endDate);
-    const diffInMonths =
-      (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-      (endDate.getMonth() - startDate.getMonth());
-
-    return diffInMonths;
-  }
-
-  toString(): string {
-    const endDateString = this.endDate
-      ? ` - ${this.endDate.toDateString()}`
-      : '';
-    const currentRoleString = this.isCurrentRole ? ' (Current Role)' : '';
-    return `${this.title} at ${this.employer}, ${
-      this.country
-    }, ${this.startDate.toDateString()}${endDateString}${currentRoleString}`;
-  }
+  jobSeeker: Seekers;
 }
 
 @Entity()
 export class Education extends Model {
-  @ManyToOne(() => JobSeekers, (jobSeeker) => jobSeeker.experiences, {
+  @ManyToOne(() => Seekers, (jobSeeker) => jobSeeker.experiences, {
     onDelete: 'CASCADE',
   })
-  jobSeeker: JobSeekers;
+  jobSeeker: Seekers;
 
   @Column()
   institution: string;
