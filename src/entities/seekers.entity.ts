@@ -9,7 +9,9 @@ import { UserAuth } from './authentication.entity';
 
 @Entity()
 export class Seekers extends Model {
-  @OneToOne(() => UserAuth)
+  @OneToOne(() => UserAuth, (userAuth) => userAuth.seekerDetails, {
+    lazy: true,
+  })
   userAuth: UserAuth;
 
   @Column()

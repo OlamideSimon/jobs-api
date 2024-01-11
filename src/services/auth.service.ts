@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Response } from 'express';
 import {
   LoginDTO,
   RegistrationDTO,
@@ -25,10 +26,17 @@ export class AuthService {
     private readonly authenticationRepository: Repository<UserAuth>,
   ) {}
 
-  async login(loginDto: LoginDTO) {
+  async getAll() {
+    return await this.authenticationRepository.find();
+  }
+
+  async login(loginDto: LoginDTO, res: Response) {
     try {
-      const account = await this.authenticationRepository.findOneBy({
-        email: loginDto.email,
+      const account = await this.authenticationRepository.findOne({
+        where: {
+          email: loginDto.email,
+          role: loginDto.account_type,
+        },
       });
 
       if (!account) {
@@ -54,6 +62,8 @@ export class AuthService {
         loginDto.remember_me,
       );
 
+      res.cookie('access_token', access_token);
+
       return {
         status: 'success',
         access_token,
@@ -64,13 +74,28 @@ export class AuthService {
     }
   }
 
-  async register(registerDto: RegistrationDTO) {
-    // console.log(registerDto.account_type)
+  async register(registerDto: RegistrationDTO, res: Response) {
     try {
+      let additionalData: any = null;
+
+      if (registerDto.account_type === 'employer') {
+        additionalData = {
+          employerDetails: { company_name: registerDto.company_name },
+        };
+      } else if (registerDto.account_type === 'seeker') {
+        additionalData = {
+          seekerDetails: {
+            first_name: registerDto.first_name,
+            last_name: registerDto.last_name,
+          },
+        };
+      }
+
       const account = await this.authenticationRepository.save(
         this.authenticationRepository.create({
           ...registerDto,
           role: registerDto.account_type,
+          ...additionalData,
         }),
       );
 
@@ -78,10 +103,12 @@ export class AuthService {
         ...account,
       });
 
+      res.cookie('access_token', access_token);
+
       return {
         status: 'success',
         access_token,
-        role: account.role,
+        role: registerDto.account_type,
       };
     } catch (error) {
       if (error.code === '23505' && error.detail.includes('email')) {

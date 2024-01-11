@@ -16,12 +16,12 @@ export class UpdateSeekerDTO {
   @IsString()
   @IsOptional()
   @ApiProperty()
-  fName: string;
+  first_name: string;
 
   @IsString()
   @ApiProperty()
   @IsOptional()
-  lName: string;
+  last_name: string;
 
   @IsString()
   @ApiProperty()

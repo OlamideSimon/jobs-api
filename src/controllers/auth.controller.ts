@@ -4,9 +4,11 @@ import {
   Get,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import {
   LoginDTO,
   RegistrationDTO,
@@ -25,8 +27,16 @@ export class AuthController {
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({ status: 200, description: 'Successful login' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  loginHandler(@Body() data: LoginDTO) {
-    return this.authService.login(data);
+  loginHandler(
+    @Body() data: LoginDTO,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.login(data, response);
+  }
+
+  @Get()
+  getAll() {
+    return this.authService.getAll();
   }
 
   @Post('register')
@@ -36,8 +46,11 @@ export class AuthController {
     description: 'Job seeker registration successful',
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
-  registerSeekerHandler(@Body() data: RegistrationDTO) {
-    return this.authService.register(data);
+  registerSeekerHandler(
+    @Body() data: RegistrationDTO,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    return this.authService.register(data, response);
   }
 
   @Get('me')

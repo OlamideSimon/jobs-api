@@ -3,27 +3,11 @@ import { IndustriesType } from 'src/utils/enums';
 import { Jobs } from './jobs.entity';
 import Model from './base.entity';
 import { UserAuth } from './authentication.entity';
+import { SocialLink } from './employerSocial.entity';
 
-@Entity()
-export class SocialLink extends Model {
-  @Column({ nullable: true })
-  instagram: string;
-
-  @Column({ nullable: true })
-  facebook: string;
-
-  @Column({ nullable: true })
-  twitter: string;
-
-  @Column({ nullable: true })
-  linkedin: string;
-
-  @Column({ nullable: true })
-  youtube: string;
-}
 @Entity()
 export class Employers extends Model {
-  @OneToOne(() => UserAuth)
+  @OneToOne(() => UserAuth, (userAuth) => userAuth.employerDetails)
   userAuth: UserAuth;
 
   @Column()

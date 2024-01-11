@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateEmployersDTO } from 'src/dto/create/employers.createDto';
 import { UpdateEmployersDTO } from 'src/dto/update/employers.updateDto';
 import { Employers } from 'src/entities/employers.entity';
 import { Repository } from 'typeorm';
@@ -12,13 +11,18 @@ export class EmployersService {
     private readonly employersRepository: Repository<Employers>,
   ) {}
 
-  async createEmployer(createEmployerDTO: CreateEmployersDTO) {
-    const employer = await this.employersRepository.create(createEmployerDTO);
-    return this.employersRepository.save(employer);
-  }
-
   async getAllEmployers() {
-    const employers = await this.employersRepository.find();
+    // const employers = await this.employersRepository
+    const employers = await this.employersRepository
+      .createQueryBuilder('employer')
+      .where('employer.company_name IS NOT NULL')
+      .andWhere('employer.industry IS NOT NULL')
+      .andWhere('employer.founded IS NOT NULL')
+      .andWhere('employer.companyDescription IS NOT NULL')
+      .andWhere('employer.companyUrl IS NOT NULL')
+      .andWhere('employer.location IS NOT NULL')
+      .andWhere('employer.employees IS NOT NULL')
+      .getMany();
 
     return {
       status: 'success',

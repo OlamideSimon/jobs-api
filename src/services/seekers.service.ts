@@ -9,6 +9,7 @@ import { Education, Experience, Seekers } from 'src/entities/seekers.entity';
 import { Repository } from 'typeorm';
 
 import PDFDocument from 'pdfkit';
+import { UserAuth } from 'src/entities/authentication.entity';
 
 @Injectable()
 export class SeekerService {
@@ -32,31 +33,55 @@ export class SeekerService {
     };
   }
 
-  async addSeekerEducation(user: Seekers, data: EducationDTO) {
+  async addSeekerEducation(user: UserAuth, data: EducationDTO) {
+    if (!user?.seekerDetails) {
+      throw new NotFoundException('Seeker not found');
+    }
+
     const newSeekerEducation = await this.educationRepository.save(
-      this.educationRepository.create({ ...data, jobSeeker: user }),
+      this.educationRepository.create({
+        ...data,
+        jobSeeker: user?.seekerDetails,
+      }),
     );
     return { ...newSeekerEducation };
   }
 
-  async addSeekerExperience(user: Seekers, data: ExperienceDTO) {
+  async addSeekerExperience(user: UserAuth, data: ExperienceDTO) {
+    if (!user?.seekerDetails) {
+      throw new NotFoundException('Seeker not found');
+    }
+
     const newSeekerExperience = await this.experienceRepository.save(
-      this.experienceRepository.create({ ...data, jobSeeker: user }),
+      this.experienceRepository.create({
+        ...data,
+        jobSeeker: user?.seekerDetails,
+      }),
     );
     return { ...newSeekerExperience };
   }
 
   async updateSeeker(userId: string, seekerDto: UpdateSeekerDTO) {
-    const seeker = await this.jobSeekerRepository.preload({
-      id: userId,
-      ...seekerDto,
+    const seeker = await this.jobSeekerRepository.findOneBy({
+      userAuth: { id: userId },
     });
-    return await this.jobSeekerRepository.save(seeker);
+    if (seeker) {
+      await this.jobSeekerRepository.update({ id: seeker?.id }, seekerDto);
+    } else {
+      await this.jobSeekerRepository.save(
+        this.jobSeekerRepository.create({
+          ...seekerDto,
+          userAuth: { id: userId },
+        }),
+      );
+    }
+
+    return;
   }
 
-  async deleteSeekerEducation(user: Seekers, id: string) {
+  async deleteSeekerEducation(user: UserAuth, id: string) {
     const seekerEducation = await this.educationRepository.findOne({
-      where: { id, jobSeeker: { id: user.id } },
+      where: { id, jobSeeker: { id: user.seekerDetails?.id } },
     });
     await this.educationRepository.remove(seekerEducation);
     return {
@@ -64,9 +89,9 @@ export class SeekerService {
     };
   }
 
-  async deleteSeekerExperience(user: Seekers, id: string) {
+  async deleteSeekerExperience(user: UserAuth, id: string) {
     const seekerExperience = await this.experienceRepository.findOne({
-      where: { id, jobSeeker: { id: user.id } },
+      where: { id, jobSeeker: { id: user.seekerDetails?.id } },
     });
     await this.experienceRepository.remove(seekerExperience);
     return {

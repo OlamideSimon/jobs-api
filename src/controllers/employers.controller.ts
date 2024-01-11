@@ -15,8 +15,10 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Role } from 'src/decorators/roles.decorator';
 import { UpdateEmployersDTO } from 'src/dto/update/employers.updateDto';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { RoleGuard } from 'src/guards/roles.guard';
 import { EmployersService } from 'src/services/employers.service';
 
 @Controller('employers')
@@ -37,6 +39,29 @@ export class EmployersController {
     return this.employersService.getAllEmployers();
   }
 
+  @Get('/applicants')
+  @Role('employer')
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all applicants for jobs under employer' })
+  @ApiBearerAuth()
+  @ApiResponse({
+    status: 200,
+    description: 'Get all applicants for jobs under employer',
+    isArray: true,
+  })
+  async getAllApplicantsForJobsUnderEmployer(@Request() req: any) {
+    const response =
+      await this.employersService.getAllApplicantsForJobsUnderEmployer(
+        req?.user?.employerDetails?.id,
+      );
+
+    return {
+      status: 'success',
+      data: response,
+    };
+  }
+
   @Get(':id')
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get an employer' })
@@ -50,7 +75,8 @@ export class EmployersController {
   }
 
   @Patch()
-  @UseGuards(AuthGuard)
+  @Role('employer')
+  @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update your profile' })
   @ApiResponse({
@@ -66,28 +92,6 @@ export class EmployersController {
       req?.user.id,
       updateEmployerDTO,
     );
-  }
-
-  @Get('/applicants')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get all applicants for jobs under employer' })
-  @ApiBearerAuth()
-  @ApiResponse({
-    status: 200,
-    description: 'Get all applicants for jobs under employer',
-    isArray: true,
-  })
-  async getAllApplicantsForJobsUnderEmployer(@Request() req: any) {
-    const response =
-      await this.employersService.getAllApplicantsForJobsUnderEmployer(
-        req?.user?.id,
-      );
-
-    return {
-      status: 'success',
-      data: response,
-    };
   }
 
   @Delete(':id')

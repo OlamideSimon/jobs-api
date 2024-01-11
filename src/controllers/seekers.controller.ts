@@ -95,11 +95,10 @@ export class SeekersController {
     @Body() data: UpdateSeekerDTO,
     @Request() req: any,
   ) {
-    const response = await this.seekerService.updateSeeker(req?.user?.id, data);
+    await this.seekerService.updateSeeker(req?.user?.id, data);
     return {
       status: 'success',
       message: 'Seeker updated successfully',
-      data: response,
     };
   }
 
