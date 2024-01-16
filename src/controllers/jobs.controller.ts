@@ -34,7 +34,7 @@ export class JobsController {
   @ApiOperation({ summary: 'Create a new job' })
   @ApiResponse({ status: 201, description: 'Job created successfully' })
   createJobHandler(@Body() body: CreateJobDto, @Request() req: any) {
-    return this.jobService.createJob(body, req?.user);
+    return this.jobService.createJob(body, req?.user?.employerDetails);
   }
 
   @Get()

@@ -1,5 +1,4 @@
 import {
-  Body,
   Controller,
   Get,
   Param,
@@ -9,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Role } from 'src/decorators/roles.decorator';
-import { CreateApplicationDto } from 'src/dto/create/applications.createDto';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { RoleGuard } from 'src/guards/roles.guard';
 import { ApplicationService } from 'src/services/applications.service';
@@ -18,28 +16,6 @@ import { ApplicationService } from 'src/services/applications.service';
 @ApiTags('Applications')
 export class ApplicationsController {
   constructor(private applicationService: ApplicationService) {}
-
-  @Post()
-  @Role('seeker')
-  @UseGuards(AuthGuard, RoleGuard)
-  @ApiOperation({ summary: 'Make a new Application' })
-  @ApiResponse({
-    status: 201,
-    description: 'Application submitted successfully',
-  })
-  async createApplicationHandler(
-    @Body() body: CreateApplicationDto,
-    @Request() req: any,
-  ) {
-    const application = await this.applicationService.createApplication(
-      body,
-      req?.user?.seekerDetails,
-    );
-    return {
-      status: 'success',
-      data: application,
-    };
-  }
 
   @Get('applied')
   @Role('seeker')
@@ -56,6 +32,28 @@ export class ApplicationsController {
     return {
       status: 'success',
       data: applications,
+    };
+  }
+
+  @Post(':jobId')
+  @Role('seeker')
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiOperation({ summary: 'Make a new Application' })
+  @ApiResponse({
+    status: 201,
+    description: 'Application submitted successfully',
+  })
+  async createApplicationHandler(
+    @Param('jobId') jobId: string,
+    @Request() req: any,
+  ) {
+    const application = await this.applicationService.createApplication(
+      jobId,
+      req?.user?.seekerDetails,
+    );
+    return {
+      status: 'success',
+      data: application,
     };
   }
 

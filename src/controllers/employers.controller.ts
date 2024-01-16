@@ -39,12 +39,11 @@ export class EmployersController {
     return this.employersService.getAllEmployers();
   }
 
-  @Get('/applicants')
+  @Get('applicants')
   @Role('employer')
   @UseGuards(AuthGuard, RoleGuard)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get all applicants for jobs under employer' })
-  @ApiBearerAuth()
   @ApiResponse({
     status: 200,
     description: 'Get all applicants for jobs under employer',
@@ -58,7 +57,28 @@ export class EmployersController {
 
     return {
       status: 'success',
-      data: response,
+      applicants: response,
+    };
+  }
+
+  @Get('jobs')
+  @Role('employer')
+  @UseGuards(AuthGuard, RoleGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get all jobs under employer' })
+  @ApiResponse({
+    status: 200,
+    description: 'Get all jobs under employer',
+    isArray: true,
+  })
+  async getAllJobsUnderEmployer(@Request() req: any) {
+    const response = await this.employersService.getAllJobsUnderEmployer(
+      req?.user?.employerDetails?.id,
+    );
+
+    return {
+      status: 'success',
+      jobs: response,
     };
   }
 

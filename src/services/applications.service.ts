@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateApplicationDto } from 'src/dto/create/applications.createDto';
 import { Applications } from 'src/entities/applications.entity';
 import { Repository } from 'typeorm';
 import { JobService } from './jobs.service';
@@ -16,12 +15,9 @@ export class ApplicationService {
     private readonly applicationRepository: Repository<Applications>,
   ) {}
 
-  async createApplication(
-    applicationDto: CreateApplicationDto,
-    applicant: Seekers,
-  ) {
+  async createApplication(jobId: string, applicant: Seekers) {
     try {
-      const job = await this.jobService.getJob(applicationDto.jobId);
+      const job = await this.jobService.getJob(jobId);
 
       const application = await this.applicationRepository.save(
         this.applicationRepository.create({ job, jobSeeker: applicant }),
@@ -37,6 +33,7 @@ export class ApplicationService {
     try {
       const applications = await this.applicationRepository.find({
         where: { jobSeeker: { id } },
+        relations: ['job'],
       });
 
       return applications;

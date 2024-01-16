@@ -21,11 +21,11 @@ export class LoginDTO {
   password: string;
 
   @IsEnum(UserType, {
-    message: 'Invalid user_type. Must be either "seeker" or "employer".',
+    message: 'Invalid account_type. Must be either "seeker" or "employer".',
   })
   @ApiProperty({
     enum: UserType,
-    description: 'User type: "seeker" or "employer".',
+    description: 'Account type: "seeker" or "employer".',
   })
   account_type: UserType;
 
