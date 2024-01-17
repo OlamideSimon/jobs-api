@@ -61,12 +61,21 @@ export class EmployersService {
   }
 
   async getAllApplicantsForJobsUnderEmployer(id: string) {
-    const employer = await this.employersRepository.findOneBy({ id });
+    const employer = await this.employersRepository.findOne({
+      where: { id },
+      relations: { jobs: { applications: { jobSeeker: true } } },
+    });
     const jobs = employer.jobs;
 
     const applicants = jobs.reduce((acc, job) => {
-      if (job.applications.length < 1) return;
-      return acc.concat({ ...job.applications, jobId: job.id });
+      if (job.applications.length < 1) return acc;
+
+      return acc.concat(
+        ...job.applications.map((application) => ({
+          ...application,
+          jobId: job.id,
+        })),
+      );
     }, []);
 
     return applicants;

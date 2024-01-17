@@ -33,7 +33,7 @@ export class ApplicationService {
     try {
       const applications = await this.applicationRepository.find({
         where: { jobSeeker: { id } },
-        relations: ['job'],
+        relations: { job: { employer: true } },
       });
 
       return applications;
@@ -49,11 +49,11 @@ export class ApplicationService {
   ) {
     try {
       const application = await this.applicationRepository.findOne({
+        relations: { job: true, jobSeeker: { userAuth: true } },
         where: {
           jobSeeker: { id: applicantId },
           job: { employer: { id: companyId }, isOpen: true, id: jobId },
         },
-        relations: ['jobSeeker', 'job'],
       });
 
       return application || null;

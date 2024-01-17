@@ -35,6 +35,26 @@ export class ApplicationsController {
     };
   }
 
+  @Get('applied/:jobId/:applicantId')
+  @Role('employer')
+  @UseGuards(AuthGuard, RoleGuard)
+  async getApplicationBySeekerIdHandler(
+    @Request() req: any,
+    @Param('jobId') jobId: string,
+    @Param('applicantId') applicantId: string,
+  ) {
+    const applications = await this.applicationService.getApplicationBySeekerId(
+      req?.user?.employerDetails?.id,
+      jobId,
+      applicantId,
+    );
+
+    return {
+      status: 'success',
+      data: applications,
+    };
+  }
+
   @Post(':jobId')
   @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
@@ -54,25 +74,6 @@ export class ApplicationsController {
     return {
       status: 'success',
       data: application,
-    };
-  }
-
-  @Get('applied/:jobId/:applicantId')
-  @Role('employer')
-  @UseGuards(AuthGuard, RoleGuard)
-  getApplicationBySeekerIdHandler(
-    @Request() req: any,
-    @Param('jobId') jobId: string,
-    @Param('applicantId') applicantId: string,
-  ) {
-    const applications = this.applicationService.getApplicationBySeekerId(
-      req?.user?.employerDetails?.id,
-      jobId,
-      applicantId,
-    );
-    return {
-      status: 'success',
-      data: applications,
     };
   }
 }
