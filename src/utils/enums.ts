@@ -90,3 +90,8 @@ export enum NotificationPreferences {
   JOBS = 'jobs',
   ALL = 'all',
 }
+
+export enum Currency {
+  NAIRA = 'NGN',
+  DOLLAR = 'USD',
+}
