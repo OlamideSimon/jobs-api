@@ -55,7 +55,7 @@ export class ApplicationsController {
   })
   async getSeekerApplicationsHandler(@Request() req: any) {
     const applications = await this.applicationService.getSeekerApplications(
-      req?.user?.seekerDetails?.id,
+      req?.user?.id,
     );
     return {
       status: 'success',
@@ -72,7 +72,7 @@ export class ApplicationsController {
     @Param('applicantId') applicantId: string,
   ) {
     const applications = await this.applicationService.getApplicationBySeekerId(
-      req?.user?.employerDetails?.id,
+      req?.user?.id,
       jobId,
       applicantId,
     );
@@ -98,7 +98,7 @@ export class ApplicationsController {
   ) {
     const application = await this.applicationService.createApplication(
       jobId,
-      req?.user?.seekerDetails,
+      req?.user,
       body,
     );
     return {

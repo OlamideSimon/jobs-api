@@ -10,5 +10,6 @@ import { EmployersService } from 'src/services/employers.service';
   imports: [TypeOrmModule.forFeature([Employers, SocialLink])],
   controllers: [EmployersController],
   providers: [EmployersService, JwtService],
+  exports: [EmployersService],
 })
 export class EmployersModule {}

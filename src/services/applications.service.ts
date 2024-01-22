@@ -4,9 +4,9 @@ import { Applications } from 'src/entities/applications.entity';
 import { Repository } from 'typeorm';
 import { JobService } from './jobs.service';
 import { SeekerService } from './seekers.service';
-import { Seekers } from 'src/entities/seekers.entity';
 import { CreateApplicationDto } from 'src/dto/create/applications.createDto';
 import { Status } from 'src/utils/enums';
+import { UserAuth } from 'src/entities/authentication.entity';
 
 @Injectable()
 export class ApplicationService {
@@ -39,11 +39,12 @@ export class ApplicationService {
 
   async createApplication(
     jobId: string,
-    applicant: Seekers,
+    user: UserAuth,
     body: CreateApplicationDto,
   ) {
     try {
       const job = await this.jobService.getJob(jobId);
+      const applicant = await this.seekerService.getSeekerByAuthId(user.id);
 
       const application = await this.applicationRepository.save(
         this.applicationRepository.create({
@@ -63,7 +64,7 @@ export class ApplicationService {
   async getSeekerApplications(id: string) {
     try {
       const applications = await this.applicationRepository.find({
-        where: { jobSeeker: { id } },
+        where: { jobSeeker: { userAuth: { id } } },
         relations: { job: { employer: true } },
       });
 
@@ -74,7 +75,7 @@ export class ApplicationService {
   }
 
   async getApplicationBySeekerId(
-    companyId: string,
+    userId: string,
     jobId: string,
     applicantId: string,
   ) {
@@ -83,11 +84,15 @@ export class ApplicationService {
         relations: { job: true, jobSeeker: { userAuth: true } },
         where: {
           jobSeeker: { id: applicantId },
-          job: { employer: { id: companyId }, isOpen: true, id: jobId },
+          job: {
+            employer: { userAuth: { id: userId } },
+            isOpen: true,
+            id: jobId,
+          },
         },
       });
 
-      let response;
+      let response: any = { ...application };
       if (!application.applyWithCV) {
         const resumeData = await this.seekerService.generateCV(applicantId);
         response = { ...application, resumeData };

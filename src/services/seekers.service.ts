@@ -35,28 +35,28 @@ export class SeekerService {
   }
 
   async addSeekerEducation(user: UserAuth, data: EducationDTO) {
-    if (!user?.seekerDetails) {
-      throw new NotFoundException('Seeker not found');
-    }
+    const seekerDetails = await this.jobSeekerRepository.findOneBy({
+      userAuth: { id: user.id },
+    });
 
     const newSeekerEducation = await this.educationRepository.save(
       this.educationRepository.create({
         ...data,
-        jobSeeker: user?.seekerDetails,
+        jobSeeker: seekerDetails,
       }),
     );
     return { ...newSeekerEducation };
   }
 
   async addSeekerExperience(user: UserAuth, data: ExperienceDTO) {
-    if (!user?.seekerDetails) {
-      throw new NotFoundException('Seeker not found');
-    }
+    const seekerDetails = await this.jobSeekerRepository.findOneBy({
+      userAuth: { id: user.id },
+    });
 
     const newSeekerExperience = await this.experienceRepository.save(
       this.experienceRepository.create({
         ...data,
-        jobSeeker: user?.seekerDetails,
+        jobSeeker: seekerDetails,
       }),
     );
     return { ...newSeekerExperience };
@@ -81,8 +81,11 @@ export class SeekerService {
   }
 
   async deleteSeekerEducation(user: UserAuth, id: string) {
+    const seekerDetails = await this.jobSeekerRepository.findOneBy({
+      userAuth: { id: user.id },
+    });
     const seekerEducation = await this.educationRepository.findOne({
-      where: { id, jobSeeker: { id: user.seekerDetails?.id } },
+      where: { id, jobSeeker: { id: seekerDetails?.id } },
     });
     await this.educationRepository.remove(seekerEducation);
     return {
@@ -91,8 +94,12 @@ export class SeekerService {
   }
 
   async deleteSeekerExperience(user: UserAuth, id: string) {
+    const seekerDetails = await this.jobSeekerRepository.findOneBy({
+      userAuth: { id: user.id },
+    });
+
     const seekerExperience = await this.experienceRepository.findOne({
-      where: { id, jobSeeker: { id: user.seekerDetails?.id } },
+      where: { id, jobSeeker: { id: seekerDetails?.id } },
     });
     await this.experienceRepository.remove(seekerExperience);
     return {
@@ -111,8 +118,18 @@ export class SeekerService {
     return seeker;
   }
 
+  async getSeekerByAuthId(userId: string) {
+    const seeker = await this.jobSeekerRepository.findOneByOrFail({
+      userAuth: { id: userId },
+    });
+
+    return seeker;
+  }
+
   async deleteSeeker(id: string) {
-    const seeker = await this.jobSeekerRepository.findOneBy({ id });
+    const seeker = await this.jobSeekerRepository.findOne({
+      where: { userAuth: { id } },
+    });
     if (!seeker) {
       return {
         status: 'error',

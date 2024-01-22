@@ -123,6 +123,6 @@ export class SeekersController {
   @Role('seeker')
   @UseGuards(AuthGuard, RoleGuard)
   deleteSelfHandler(@Request() req: any) {
-    return this.seekerService.deleteSeeker(req?.user);
+    return this.seekerService.deleteSeeker(req?.user?.id);
   }
 }

@@ -52,7 +52,7 @@ export class EmployersController {
   async getAllApplicantsForJobsUnderEmployer(@Request() req: any) {
     const response =
       await this.employersService.getAllApplicantsForJobsUnderEmployer(
-        req?.user?.employerDetails?.id,
+        req?.user?.id,
       );
 
     return {
@@ -73,7 +73,7 @@ export class EmployersController {
   })
   async getAllJobsUnderEmployer(@Request() req: any) {
     const response = await this.employersService.getAllJobsUnderEmployer(
-      req?.user?.employerDetails?.id,
+      req?.user?.id,
     );
 
     return {

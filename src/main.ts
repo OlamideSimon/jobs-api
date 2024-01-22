@@ -7,8 +7,9 @@ import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
 
-  app.use(express.json({ limit: '50mb' }));
+  app.use(express.json({ limit: '10mb' }));
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -31,7 +32,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
 
-  app.enableCors();
   app.use(cookieParser());
   await app.listen(process.env.PORT || 5000);
 }

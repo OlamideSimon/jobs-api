@@ -57,6 +57,7 @@ export class AuthService {
           message: 'Invalid password. Please try again.',
         };
       }
+
       const access_token = await this.generateToken(
         { ...account },
         loginDto.remember_me,
@@ -123,8 +124,9 @@ export class AuthService {
 
   async getMe(userId: string) {
     try {
-      const user = await this.authenticationRepository.findOneBy({
-        id: userId,
+      const user = await this.authenticationRepository.findOne({
+        where: { id: userId },
+        relations: ['employerDetails', 'seekerDetails'],
       });
 
       if (!user) {

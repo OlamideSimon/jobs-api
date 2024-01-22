@@ -38,8 +38,17 @@ export class EmployersService {
     return employer;
   }
 
+  async getEmployerByAuthId(id: string) {
+    const employer = await this.employersRepository.findOneByOrFail({ id });
+
+    return employer;
+  }
+
   async updateEmployer(id: string, updateEmployerDTO: UpdateEmployersDTO) {
-    const employer = await this.employersRepository.findOneBy({ id });
+    const employer = await this.employersRepository.findOne({
+      where: { userAuth: { id } },
+    });
+
     if (!employer) {
       throw new NotFoundException('Employer not found');
     }
@@ -62,7 +71,7 @@ export class EmployersService {
 
   async getAllApplicantsForJobsUnderEmployer(id: string) {
     const employer = await this.employersRepository.findOne({
-      where: { id },
+      where: { userAuth: { id } },
       relations: { jobs: { applications: { jobSeeker: true } } },
     });
     const jobs = employer.jobs;
@@ -82,7 +91,9 @@ export class EmployersService {
   }
 
   async getAllJobsUnderEmployer(id: string) {
-    const employer = await this.employersRepository.findOneBy({ id });
+    const employer = await this.employersRepository.findOne({
+      where: { userAuth: { id } },
+    });
     const jobs = employer.jobs;
 
     return jobs;
