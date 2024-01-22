@@ -53,9 +53,6 @@ export class UpdateSeekerDTO {
   resumeUrl: string;
 
   @IsOptional()
-  resumeData: Buffer;
-
-  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   @ApiProperty({ type: [String] })

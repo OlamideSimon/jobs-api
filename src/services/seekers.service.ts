@@ -1,14 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import PDFDocument from 'pdfkit';
+import * as blobStream from 'blob-stream';
+
 import {
   EducationDTO,
   ExperienceDTO,
   UpdateSeekerDTO,
 } from 'src/dto/update/seeker.updateDto';
 import { Education, Experience, Seekers } from 'src/entities/seekers.entity';
-import { Repository } from 'typeorm';
-
-import PDFDocument from 'pdfkit';
 import { UserAuth } from 'src/entities/authentication.entity';
 
 @Injectable()
@@ -144,6 +145,7 @@ export class SeekerService {
     }
 
     const pdf = new PDFDocument();
+    const stream = pdf.pipe(blobStream());
     pdf.font('Helvetica-Bold');
 
     // Header
@@ -190,6 +192,10 @@ export class SeekerService {
     });
 
     pdf.end();
-    return pdf;
+    stream.on('finish', () => {
+      const blob = stream.toBlobURL('application/pdf');
+
+      return blob;
+    });
   }
 }

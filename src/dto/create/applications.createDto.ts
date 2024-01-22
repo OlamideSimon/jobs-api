@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsBoolean,
   IsEnum,
@@ -6,17 +6,12 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Currency, Status } from 'src/utils/enums';
+import { Currency } from 'src/utils/enums';
 
 export class CreateApplicationDto {
-  @ApiProperty({ enum: Status })
-  @IsEnum(Status)
-  status: Status;
-
   @ApiProperty({ type: 'string', format: 'binary' })
   @IsOptional()
-  @IsString()
-  resumeData?: string;
+  resumeData?: Buffer;
 
   @ApiProperty()
   @IsBoolean()
@@ -33,4 +28,9 @@ export class CreateApplicationDto {
   @ApiProperty()
   @IsNumber()
   expSalary: number;
+
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  coverLetter?: string;
 }
