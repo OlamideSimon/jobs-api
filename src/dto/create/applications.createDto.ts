@@ -9,9 +9,9 @@ import {
 import { Currency } from 'src/utils/enums';
 
 export class CreateApplicationDto {
-  @ApiProperty({ type: 'string', format: 'binary' })
+  @ApiProperty({ type: 'string' })
   @IsOptional()
-  resumeData?: Buffer;
+  resumeData?: string;
 
   @ApiProperty()
   @IsBoolean()

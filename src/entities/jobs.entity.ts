@@ -1,7 +1,12 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import Model from './base.entity';
 import { Employers } from './employers.entity';
-import { ExperienceLevel, IndustriesType, JobsType } from 'src/utils/enums';
+import {
+  ExperienceLevel,
+  IndustriesType,
+  JobsType,
+  JobsTypeDescriptions,
+} from 'src/utils/enums';
 import { Applications } from './applications.entity';
 
 @Entity()
@@ -71,4 +76,11 @@ export class Jobs extends Model {
     eager: true,
   })
   applications: Applications[];
+
+  toJSON() {
+    return {
+      ...this,
+      type: this.type.map((type) => JobsTypeDescriptions[type]),
+    };
+  }
 }

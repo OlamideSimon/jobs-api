@@ -39,6 +39,14 @@ export enum JobsType {
   INTERNSHIP = 'internship',
 }
 
+export const JobsTypeDescriptions: Record<JobsType, string> = {
+  [JobsType.FULL_TIME]: 'Full Time',
+  [JobsType.PART_TIME]: 'Part Time',
+  [JobsType.CONTRACT]: 'Contract',
+  [JobsType.REMOTE]: 'Remote',
+  [JobsType.INTERNSHIP]: 'Internship',
+};
+
 export enum ExperienceLevel {
   NoExperience = 'no experience',
   InternshipAndGraduate = 'internship & graduate',

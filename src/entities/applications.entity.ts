@@ -15,8 +15,8 @@ export class Applications extends Model {
   @Column({ type: 'enum', enum: Status, default: Status.PENDING })
   status: Status;
 
-  @Column({ type: 'bytea', nullable: true })
-  resumeData: Buffer;
+  @Column({ nullable: true })
+  resumeData: string;
 
   @Column({ type: 'boolean', default: false })
   applyWithCV: boolean;

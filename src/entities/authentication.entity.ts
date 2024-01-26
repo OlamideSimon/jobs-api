@@ -38,4 +38,8 @@ export class UserAuth extends Model {
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 12);
   }
+
+  toJSON() {
+    return { ...this, password: undefined };
+  }
 }
