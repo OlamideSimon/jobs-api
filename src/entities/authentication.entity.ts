@@ -17,7 +17,6 @@ export class UserAuth extends Model {
   role: Role;
 
   @OneToOne(() => Seekers, (seeker) => seeker.userAuth, {
-    lazy: true,
     cascade: true,
     nullable: true,
     onDelete: 'CASCADE',
@@ -26,7 +25,6 @@ export class UserAuth extends Model {
   seekerDetails: Seekers;
 
   @OneToOne(() => Employers, (employer) => employer.userAuth, {
-    lazy: true,
     cascade: true,
     nullable: true,
     onDelete: 'CASCADE',

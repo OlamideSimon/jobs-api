@@ -62,8 +62,13 @@ export class AuthService {
         { ...account },
         loginDto.remember_me,
       );
+      const id =
+        loginDto.account_type === 'seeker'
+          ? account?.seekerDetails?.id
+          : account?.employerDetails?.id;
 
       res.cookie('access_token', access_token);
+      res.cookie('__user_id', id);
 
       return {
         status: 'success',
@@ -104,7 +109,13 @@ export class AuthService {
         ...account,
       });
 
+      const id =
+        registerDto.account_type === 'seeker'
+          ? account[0]?.seekerDetails?.id
+          : account[0]?.employerDetails?.id;
+
       res.cookie('access_token', access_token);
+      res.cookie('__user_id', id);
 
       return {
         status: 'success',
