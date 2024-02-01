@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import PDFDocument from 'pdfkit';
-import * as blobStream from 'blob-stream';
+import puppeteer from 'puppeteer';
+import * as hbs from 'handlebars';
+import * as fs from 'fs';
 
 import {
   EducationDTO,
@@ -11,6 +12,8 @@ import {
 } from 'src/dto/update/seeker.updateDto';
 import { Education, Experience, Seekers } from 'src/entities/seekers.entity';
 import { UserAuth } from 'src/entities/authentication.entity';
+import { Applications } from 'src/entities/applications.entity';
+import { convertDate } from 'src/utils/templates/handlebars.functions';
 
 @Injectable()
 export class SeekerService {
@@ -151,68 +154,52 @@ export class SeekerService {
     };
   }
 
-  async generateCV(jobSeekerId: string) {
+  async generateCV(jobSeekerId: string, application: Applications) {
     const jobSeeker = await this.jobSeekerRepository.findOneOrFail({
       where: { id: jobSeekerId },
-      relations: ['experiences', 'educations'],
+      relations: ['experiences', 'education'],
     });
 
-    if (!jobSeeker) {
-      throw new NotFoundException(`JobSeeker with id ${jobSeekerId} not found`);
-    }
+    const resumeContent = {
+      name: `${jobSeeker.first_name} ${jobSeeker.last_name}`,
+      phone: jobSeeker.phone,
+      email: jobSeeker.userAuth.email,
+      location: jobSeeker.location,
+      about: jobSeeker.about,
+      skills: jobSeeker.skills,
+      experiences: jobSeeker.experiences,
+      education: jobSeeker.education,
+      availability: jobSeeker.availability,
+      experience: application.yearsOfExperience,
+    };
 
-    const pdf = new PDFDocument();
-    const stream = pdf.pipe(blobStream());
-    pdf.font('Helvetica-Bold');
+    hbs.registerHelper('convertDate', convertDate);
+    const template = hbs.compile(
+      fs.readFileSync('./src/utils/templates/resumeDesign.hbs', 'utf8'),
+    );
+    const htmlContent = template(resumeContent);
 
-    // Header
-    pdf.fontSize(20).text(`Curriculum Vitae`, { align: 'center' });
-    pdf.fontSize(16).text(`${jobSeeker.first_name} ${jobSeeker.last_name}`, {
-      align: 'center',
-    });
-    pdf.moveDown(1);
+    // Create a browser instance
+    const browser = await puppeteer.launch({ headless: 'new' });
 
-    // Experiences
-    pdf.fontSize(18).text('Experiences');
-    jobSeeker.experiences.forEach((experience) => {
-      pdf.moveDown(0.5);
-      pdf.fontSize(16).text(`${experience.title} at ${experience.employer}`);
-      pdf.fontSize(14).text(`Location: ${experience.country}`);
-      pdf
-        .fontSize(14)
-        .text(
-          `Duration: ${experience.startDate.toDateString()} - ${
-            experience.isCurrentRole
-              ? 'Present'
-              : experience.endDate.toDateString()
-          }`,
-        );
-      pdf.fontSize(14).text(`Responsibilities: ${experience.responsibilities}`);
-      pdf.moveDown(0.5);
+    // Create a new page
+    const page = await browser.newPage();
+
+    page.setContent(htmlContent, { waitUntil: 'domcontentloaded' });
+
+    const pdfBuffer = await page.pdf({
+      format: 'a4',
+      printBackground: false,
     });
 
-    // Education
-    pdf.moveDown(1);
-    pdf.fontSize(18).text('Education');
-    jobSeeker.education.forEach((education) => {
-      pdf.moveDown(0.5);
-      pdf.fontSize(16).text(`${education.degree} in ${education.fieldOfStudy}`);
-      pdf.fontSize(14).text(`Institution: ${education.institution}`);
-      pdf
-        .fontSize(14)
-        .text(
-          `Duration: ${education.startDate.toDateString()} - ${
-            education.isStudying ? 'Present' : education.endDate.toDateString()
-          }`,
-        );
-      pdf.moveDown(0.5);
-    });
+    // Close the browser
+    await browser.close();
 
-    pdf.end();
-    stream.on('finish', () => {
-      const blob = stream.toBlobURL('application/pdf');
+    // Convert PDF buffer to data URL
+    const blob = URL.createObjectURL(
+      new Blob([pdfBuffer], { type: 'application/pdf' }),
+    );
 
-      return blob;
-    });
+    return blob;
   }
 }

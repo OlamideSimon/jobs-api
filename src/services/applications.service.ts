@@ -93,8 +93,11 @@ export class ApplicationService {
       });
 
       let response: any = { ...application };
-      if (!application.applyWithCV) {
-        const resumeData = await this.seekerService.generateCV(applicantId);
+      if (!application.applyWithCV || !application.resumeData) {
+        const resumeData = await this.seekerService.generateCV(
+          applicantId,
+          application,
+        );
         response = { ...application, resumeData };
       }
 

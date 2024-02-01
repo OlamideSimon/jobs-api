@@ -70,24 +70,34 @@ export class EmployersService {
   }
 
   async getAllApplicantsForJobsUnderEmployer(id: string) {
-    const employer = await this.employersRepository.findOne({
-      where: { userAuth: { id } },
-      relations: { jobs: { applications: { jobSeeker: true } } },
-    });
-    const jobs = employer.jobs;
+    try {
+      const employer = await this.employersRepository.findOne({
+        where: { userAuth: { id } },
+        relations: { jobs: { applications: { jobSeeker: true, job: true } } },
+      });
 
-    const applicants = jobs.reduce((acc, job) => {
-      if (job.applications.length < 1) return acc;
+      if (!employer) {
+        return {
+          status: 'error',
+          message: 'Employer not found',
+        };
+      }
 
-      return acc.concat(
-        ...job.applications.map((application) => ({
+      const applicants = employer.jobs.flatMap((job) =>
+        job.applications.map((application) => ({
           ...application,
           jobId: job.id,
         })),
       );
-    }, []);
 
-    return applicants;
+      return applicants;
+    } catch (error) {
+      console.error('Error fetching applicants:', error.message);
+      return {
+        status: 'error',
+        message: 'Error fetching applicants',
+      };
+    }
   }
 
   async getAllJobsUnderEmployer(id: string) {

@@ -18,6 +18,9 @@ export class Applications extends Model {
   @Column({ nullable: true })
   resumeData: string;
 
+  @Column({ nullable: true })
+  coverLetter: string;
+
   @Column({ type: 'boolean', default: false })
   applyWithCV: boolean;
 
