@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany, OneToOne } from 'typeorm';
 import Model from './base.entity';
 import {
+  ExperienceLevelDescriptions,
   JobAvailabilityStatus,
   Levels,
   NotificationPreferences,
@@ -9,9 +10,7 @@ import { UserAuth } from './authentication.entity';
 
 @Entity()
 export class Seekers extends Model {
-  @OneToOne(() => UserAuth, (userAuth) => userAuth.seekerDetails, {
-    lazy: true,
-  })
+  @OneToOne(() => UserAuth, (userAuth) => userAuth.seekerDetails)
   userAuth: UserAuth;
 
   @Column()
@@ -100,6 +99,13 @@ export class Experience extends Model {
     onDelete: 'CASCADE',
   })
   jobSeeker: Seekers;
+
+  toJSON() {
+    return {
+      ...this,
+      level: ExperienceLevelDescriptions[this.level],
+    };
+  }
 }
 
 @Entity()

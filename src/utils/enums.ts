@@ -56,6 +56,15 @@ export enum ExperienceLevel {
   Executive = 'executive',
 }
 
+export const ExperienceLevelDescriptions: Record<ExperienceLevel, string> = {
+  [ExperienceLevel.NoExperience]: 'No Experience',
+  [ExperienceLevel.InternshipAndGraduate]: 'Internship & Graduate',
+  [ExperienceLevel.Entry]: 'Entry',
+  [ExperienceLevel.Mid]: 'Mid',
+  [ExperienceLevel.Senior]: 'Senior',
+  [ExperienceLevel.Executive]: 'Executive',
+};
+
 export enum IndustriesType {
   AccountingFinance = 'accounting & finance',
   AdministrativeClerical = 'administrative & clerical',

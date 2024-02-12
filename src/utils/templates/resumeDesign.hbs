@@ -12,17 +12,16 @@
       whitesmoke; width: 793.8px; height: 1122.66px; padding: 20px 40px;
       box-sizing: border-box; } #resume-header { text-align: center; }
       #resume-header > h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
-      #resume-header > ul { margin: 0; padding: 0; display: flex;
+      #resume-header > ul { margin: 8px 0; padding: 0; display: flex;
       justify-content: center; list-style-type: none; } #resume-header > ul > li
-      { text-align: center; } section { margin: 50px 0; } section > p {
-      text-transform: uppercase; font-weight: 600; display: flex; align-items:
-      center; } section > p::after { content: ''; background-color: #2cde80;
-      height: 2px; margin-left: 10px; flex: 1; } .section-body { padding: 0
-      40px; font-weight: 400; font-size: 14px; line-height: 20px; }
-      .section-body div { margin: 10px 0; } .section-body h3 { margin: 0 0 4px
-      0; } .skills { display: flex; flex-wrap: wrap; gap: 5px; } .skill {
-      background-color: gray; color: white; padding: 5px 10px; border-radius:
-      10px; }
+      { text-align: center; font-size: 13px; } section { margin: 50px 0; }
+      section > p { text-transform: uppercase; font-weight: 600; display: flex;
+      align-items: center; } section > p > span { background: #2cde80; height:
+      2px; margin-left: 10px; flex: 1; } .section-body { padding: 0 40px;
+      font-weight: 400; font-size: 14px; line-height: 20px; } .section-body div
+      { margin: 10px 0; } .section-body h3 { margin: 0 0 4px 0; } .skills {
+      display: flex; flex-wrap: wrap; gap: 5px; } .skill { background: #000;
+      color: black; padding: 5px 10px; border-radius: 10px; }
     </style>
   </head>
 
@@ -30,99 +29,68 @@
     <div id='resume'>
       <hr />
       <header id='resume-header'>
-        <h1>{{ name }}</h1>
+        <h1>{{name}}</h1>
         <ul class='divide'>
           <li>
             <b>Experience:</b>
-            {{ experience }}
+            {{experience}}years
           </li>
           <li>
             <b>Availability:</b>
-            {{ availability }}
+            {{availability}}
           </li>
           <li>
             <b>Location:</b>
-            {{ location }}
+            {{location}}
           </li>
         </ul>
         <ul class='divide'>
-          <li>{{ email }}</li>
-          <li>{{ phone }}</li>
+          <li>{{email}}</li>
+          <li>{{phone}}</li>
         </ul>
       </header>
 
       <section>
-        <p>about me</p>
+        <p>about me <span></span></p>
         <div class='section-body'>
-          {{ about }}
+          {{about}}
         </div>
       </section>
 
       <section>
-        <p>Work Experience</p>
+        <p>Work Experience <span></span></p>
         <div class='section-body'>
           {{#each experiences}}
-          <div>
-            <h3>{{ employer }} ({{ country }})</h3>
-            <span class='divide'><span>{{ level }}</span><span>{{ title }}</span></span><br />
-            <span>{{ convertDate startDate endDate }}</span>
-
             <div>
-              {{{ responsibilities }}}
+              <h3>{{employer}} ({{country}})</h3>
+              <span class='divide'><span>{{level}}</span><span
+                >{{title}}</span></span><br />
+              <span>{{convertDate startDate endDate}}</span>
+
+              <div>
+                {{{responsibilities}}}
+              </div>
             </div>
-          </div>
           {{/each}}
-
-          <div>
-            <h3>Silex Secure Labs (Abuja, Nigeria)</h3>
-            <span class='divide'><span>Entry Level</span><span>Full-stack
-                developer</span></span><br />
-            <span>Jan 2022 - Present</span>
-
-            <div>
-              <ul>
-                <li>
-                  Utilize modern frontend frameworks, including React.js, to
-                  enhance user experience and improve application performance,
-                  while implementing responsive and pixel-perfect designs using
-                  HTML5, CSS3, and JavaScripts
-                </li>
-                <li>
-                  Foster collaborative relationships with cross-functional teams
-                  to design and develop intuitive user interfaces for web
-                  applications.
-                </li>
-                <li>
-                  Collaborate closely with UI/UX designers to translate
-                  wireframes and mockups into functional frontend components,
-                  ensuring seamless user experiences.
-                </li>
-                <li>
-                  Excel in working both independently and as part of a team,
-                  employing strong problem- solving skills to solve challenges
-                  effectively.
-                </li>
-              </ul>
-            </div>
-          </div>
         </div>
       </section>
 
       <section>
-        <p>Education</p>
+        <p>Education <span></span></p>
         <div class='section-body'>
           {{#each education}}
-          <div>
-            <h3>{{ institution }}</h3>
-            <span class='divide'><span>{{ degree }}</span><span>{{ fieldOfStudy }}</span></span><br />
-            <span>{{ convertDate startDate endDate }}</span>
-          </div>
+            <div>
+              <h3>{{institution}}</h3>
+              <span class='divide'><span>{{degree}}</span><span
+                >{{fieldOfStudy}}</span></span><br />
+              <span>{{convertDate startDate endDate}}</span>
+            </div>
           {{/each}}
         </div>
       </section>
 
       <section>
-        <p>Skills</p>
+        <p>Skills <span></span></p>
         <div class='section-body skills'>
           <div class='skill'>Database</div>
           <div class='skill'>Database</div>

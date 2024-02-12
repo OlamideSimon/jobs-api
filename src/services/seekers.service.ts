@@ -157,7 +157,7 @@ export class SeekerService {
   async generateCV(jobSeekerId: string, application: Applications) {
     const jobSeeker = await this.jobSeekerRepository.findOneOrFail({
       where: { id: jobSeekerId },
-      relations: ['experiences', 'education'],
+      relations: ['experiences', 'education', 'userAuth'],
     });
 
     const resumeContent = {
@@ -185,21 +185,17 @@ export class SeekerService {
     // Create a new page
     const page = await browser.newPage();
 
-    page.setContent(htmlContent, { waitUntil: 'domcontentloaded' });
+    await page.setContent(htmlContent);
 
     const pdfBuffer = await page.pdf({
       format: 'a4',
       printBackground: false,
+      margin: { top: 50, bottom: 50 },
     });
 
     // Close the browser
     await browser.close();
 
-    // Convert PDF buffer to data URL
-    const blob = URL.createObjectURL(
-      new Blob([pdfBuffer], { type: 'application/pdf' }),
-    );
-
-    return blob;
+    return `data:application/pdf;base64,${pdfBuffer.toString('base64')}`;
   }
 }
